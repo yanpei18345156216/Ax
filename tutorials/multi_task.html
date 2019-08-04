@@ -1,0 +1,1429 @@
+<!DOCTYPE html><html lang=""><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Ax · Adaptive Experimentation Platform</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Adaptive Experimentation Platform"/><meta property="og:title" content="Ax · Adaptive Experimentation Platform"/><meta property="og:type" content="website"/><meta property="og:url" content="https://ax.dev//index.html"/><meta property="og:description" content="Adaptive Experimentation Platform"/><meta property="og:image" content="https://ax.dev/img/ax.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://ax.dev/img/ax.svg"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-139570076-1', 'auto');
+              ga('send', 'pageview');
+            </script><script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script><script type="text/javascript" src="/js/plotUtils.js"></script><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/mathjax.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/ax_lockup_white.svg" alt="Ax"/><h2 class="headerTitleWithLogo">Ax</h2></a><a href="/versions.html"><h3>stable</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/docs/why-ax.html" target="_self">Docs</a></li><li class=""><a href="/tutorials/" target="_self">Tutorials</a></li><li class=""><a href="/api/" target="_self">API</a></li><li class=""><a href="https://github.com/facebook/Ax" target="_self">GitHub</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span></span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorials</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tutorials/">Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">API Comparison</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tutorials/gpei_hartmann_loop.html">Loop API</a></li><li class="navListItem"><a class="navItem" href="/tutorials/gpei_hartmann_service.html">Service API</a></li><li class="navListItem"><a class="navItem" href="/tutorials/gpei_hartmann_developer.html">Developer API</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Bayesian Optimization</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tutorials/tune_cnn.html">Hyperparameter Optimization for PyTorch</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/tutorials/multi_task.html">Multi-Task Modeling</a></li><li class="navListItem"><a class="navItem" href="/tutorials/benchmarking_suite_example.html">Benchmarking Suite</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Field Experiments</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tutorials/factorial.html">Bandit Optimization</a></li><li class="navListItem"><a class="navItem" href="/tutorials/human_in_the_loop/human_in_the_loop.html">Human-in-the-Loop Optimization</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Deep Dives</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tutorials/building_blocks.html">Building Blocks of Ax</a></li><li class="navListItem"><a class="navItem" href="/tutorials/visualizations.html">Visualizations</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="tutorialBody">
+<script>
+const requirejs = Object();
+requirejs.config = function() { };
+
+const dependencyMap = {
+    'plotly': Plotly,
+}
+
+function require(deps, fxn) {
+    return fxn(...deps.map(dep => dependencyMap[dep]));
+};
+</script>
+<div class="notebook">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Multi-task-Bayesian-Optimization">Multi-task Bayesian Optimization<a class="anchor-link" href="#Multi-task-Bayesian-Optimization">¶</a></h1><p>This tutorial uses synthetic functions to illustrate Bayesian optimization using a multi-task Gaussian Process in Ax. A typical use case is optimizing an expensive-to-evaluate (online) system with supporting (offline) simulations of that system.</p>
+<p>Bayesian optimization with a multi-task kernel (Multi-task Bayesian optimization) is described by Swersky et al.  (2013). Letham and Bakshy (2019) describe using multi-task Bayesian optimization to tune a ranking system with a mix of online and offline (simulator) experiments.</p>
+<p>This tutorial produces the results of Online Appendix 2 from <a href="https://arxiv.org/pdf/1904.01049.pdf">that paper</a>.</p>
+<p>The synthetic problem used here is to maximize the Hartmann 6 function, a classic optimization test problem in 6 dimensions, subject to a constraint on the 2-norm of $x$. Both the objective and the constraint are treated as unknown and are modeled with separate GPs. Both objective and constraint are noisy.</p>
+<p>Throughout the optimization we can make nosiy observations directly of the objective and constraint (an online observation), and we can make noisy observations of a biased version of the objective and constraint (offline observations). Bias is simulated by passing the function values through a piecewise linear function. Offline observations are much less time-consuming than online observations, so we wish to use them to improve our ability to optimize the online objective.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [1]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">ax.core.data</span> <span class="k">import</span> <span class="n">Data</span>
+<span class="kn">from</span> <span class="nn">ax.core.observation</span> <span class="k">import</span> <span class="n">ObservationFeatures</span><span class="p">,</span> <span class="n">observations_from_data</span>
+<span class="kn">from</span> <span class="nn">ax.core.optimization_config</span> <span class="k">import</span> <span class="n">OptimizationConfig</span>
+<span class="kn">from</span> <span class="nn">ax.core.search_space</span> <span class="k">import</span> <span class="n">SearchSpace</span>
+<span class="kn">from</span> <span class="nn">ax.core.objective</span> <span class="k">import</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">ax.runners.synthetic</span> <span class="k">import</span> <span class="n">SyntheticRunner</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.random</span> <span class="k">import</span> <span class="n">RandomModelBridge</span>
+<span class="kn">from</span> <span class="nn">ax.core.outcome_constraint</span> <span class="k">import</span> <span class="n">OutcomeConstraint</span>
+<span class="kn">from</span> <span class="nn">ax.core.types</span> <span class="k">import</span> <span class="n">ComparisonOp</span>
+<span class="kn">from</span> <span class="nn">ax.core.parameter</span> <span class="k">import</span> <span class="n">RangeParameter</span><span class="p">,</span> <span class="n">ParameterType</span>
+<span class="kn">from</span> <span class="nn">ax.core.multi_type_experiment</span> <span class="k">import</span> <span class="n">MultiTypeExperiment</span>
+<span class="kn">from</span> <span class="nn">ax.metrics.hartmann6</span> <span class="k">import</span> <span class="n">Hartmann6Metric</span>
+<span class="kn">from</span> <span class="nn">ax.metrics.l2norm</span> <span class="k">import</span> <span class="n">L2NormMetric</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.factory</span> <span class="k">import</span> <span class="n">get_sobol</span><span class="p">,</span> <span class="n">get_GPEI</span><span class="p">,</span> <span class="n">get_MTGP</span>
+<span class="kn">from</span> <span class="nn">ax.core.generator_run</span> <span class="k">import</span> <span class="n">GeneratorRun</span>
+<span class="kn">from</span> <span class="nn">ax.plot.diagnostic</span> <span class="k">import</span> <span class="n">interact_batch_comparison</span>
+<span class="kn">from</span> <span class="nn">ax.utils.notebook.plotting</span> <span class="k">import</span> <span class="n">init_notebook_plotting</span><span class="p">,</span> <span class="n">render</span>
+
+<span class="n">init_notebook_plotting</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea">
+<script type="text/javascript">/*
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ */
+
+requirejs.config({
+  paths: {
+    plotly: ['https://cdn.plot.ly/plotly-latest.min'],
+  },
+});
+if (!window.Plotly) {
+  require(['plotly'], function(plotly) {
+    window.Plotly = plotly;
+  });
+}
+/*
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ */
+
+// helper functions used across multiple plots
+function rgb(rgb_array) {
+  return 'rgb(' + rgb_array.join() + ')';
+}
+
+function copy_and_reverse(arr) {
+  const copy = arr.slice();
+  copy.reverse();
+  return copy;
+}
+
+function axis_range(grid, is_log) {
+  return is_log ?
+    [Math.log10(Math.min(...grid)), Math.log10(Math.max(...grid))]:
+    [Math.min(...grid), Math.max(...grid)];
+}
+
+function relativize_data(f, sd, rel, arm_data, metric) {
+  // if relative, extract status quo & compute ratio
+  const f_final = rel === true ? [] : f;
+  const sd_final = rel === true ? []: sd;
+
+  if (rel === true) {
+    const f_sq = (
+      arm_data['in_sample'][arm_data['status_quo_name']]['y'][metric]
+    );
+    const sd_sq = (
+      arm_data['in_sample'][arm_data['status_quo_name']]['se'][metric]
+    );
+
+    for (let i = 0; i < f.length; i++) {
+      res = relativize(f[i], sd[i], f_sq, sd_sq);
+      f_final.push(100 * res[0]);
+      sd_final.push(100 * res[1]);
+    }
+  }
+
+  return [f_final, sd_final];
+}
+
+function relativize(m_t, sem_t, m_c, sem_c) {
+  r_hat = (
+    (m_t - m_c) / Math.abs(m_c) -
+    Math.pow(sem_c, 2) * m_t / Math.pow(Math.abs(m_c), 3)
+  );
+  variance = (
+    (Math.pow(sem_t, 2) + Math.pow((m_t / m_c * sem_c), 2)) /
+    Math.pow(m_c, 2)
+   )
+   return [r_hat, Math.sqrt(variance)];
+}
+</script>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:14:45] ipy_plotting: Injecting Plotly library into cell. Do not overwrite or delete cell.
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="1.-Define-Metric-classes">1. Define Metric classes<a class="anchor-link" href="#1.-Define-Metric-classes">¶</a></h2><p>For this example, the online system is optimizing a Hartmann6 function subject to a 2-norm constraint. The Metric objects for these are directly imported above. We create analagous offline versions of these two metrics which are identical but have a transform applied (a piecewise linear function). We construct Metric objects for each of them.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [2]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Create metrics with artificial offline bias, for both objective and constraint</span>
+<span class="c1"># by passing the true values through a piecewise linear function.</span>
+
+<span class="k">class</span> <span class="nc">OfflineHartmann6Metric</span><span class="p">(</span><span class="n">Hartmann6Metric</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">raw_res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.35</span>
+        <span class="k">if</span> <span class="n">raw_res</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mf">1.5</span><span class="o">*</span> <span class="p">(</span><span class="n">raw_res</span> <span class="o">-</span> <span class="n">m</span><span class="p">))</span> <span class="o">+</span> <span class="n">m</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mf">6.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_res</span> <span class="o">-</span> <span class="n">m</span><span class="p">))</span> <span class="o">+</span> <span class="n">m</span>
+
+<span class="k">class</span> <span class="nc">OfflineL2NormMetric</span><span class="p">(</span><span class="n">L2NormMetric</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">raw_res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mf">1.25</span>
+        <span class="k">if</span> <span class="n">raw_res</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_res</span> <span class="o">-</span> <span class="n">m</span><span class="p">))</span> <span class="o">+</span> <span class="n">m</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_res</span> <span class="o">-</span> <span class="n">m</span><span class="p">))</span> <span class="o">+</span> <span class="n">m</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="2.-Create-experiment">2. Create experiment<a class="anchor-link" href="#2.-Create-experiment">¶</a></h2><p>A MultiTypeExperiment is used for managing online and offline trials together. It is constructed in several steps:</p>
+<ol>
+<li><b> Create the search space</b> - This is done in the usual way.</li>
+<li><b>Specify optimization config</b> - Also done in the usual way.</li>
+<li><b>Initialize Experiment</b> - In addition to the search_space and optimization_config, specify that "online" is the default trial_type. This is the main trial type for which we're optimizing. Optimization metrics are defined to be for this type and new trials assume this trial type by default.</li>
+<li><b>Establish offline trial_type</b> - Register the "offline" trial type and specify how to deploy trials of this type.</li>
+<li><b>Add offline metrics</b> - Create the offline metrics and add them to the experiment. When adding the metrics, we need to specify the trial type ("offline") and online metric name it is associated with so the model can link them.</li>
+</ol>
+<p>Finally, because this is a synthetic benchmark problem where the true function values are known, we will also register metrics with the true (noiseless) function values for plotting below.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [3]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_experiment</span><span class="p">(</span><span class="n">include_true_metric</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">noise_sd</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Observations will have this much Normal noise added to them</span>
+    
+    <span class="c1"># 1. Create simple search space for [0,1]^d, d=6</span>
+    <span class="n">param_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="s2">"x</span><span class="si">{i}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">RangeParameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">param_names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parameter_type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">search_space</span><span class="o">=</span><span class="n">SearchSpace</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+    
+    <span class="c1"># 2. Specify optimization config</span>
+    <span class="n">online_objective</span> <span class="o">=</span> <span class="n">Hartmann6Metric</span><span class="p">(</span><span class="s2">"objective"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="n">noise_sd</span><span class="p">)</span>
+    <span class="n">online_constraint</span> <span class="o">=</span> <span class="n">L2NormMetric</span><span class="p">(</span><span class="s2">"constraint"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="n">noise_sd</span><span class="p">)</span>
+    <span class="n">opt_config</span> <span class="o">=</span> <span class="n">OptimizationConfig</span><span class="p">(</span>
+        <span class="n">objective</span><span class="o">=</span><span class="n">Objective</span><span class="p">(</span><span class="n">online_objective</span><span class="p">,</span> <span class="n">minimize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">outcome_constraints</span><span class="o">=</span><span class="p">[</span><span class="n">OutcomeConstraint</span><span class="p">(</span><span class="n">online_constraint</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="n">ComparisonOp</span><span class="o">.</span><span class="n">LEQ</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># 3. Init experiment</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">MultiTypeExperiment</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">"mt_exp"</span><span class="p">,</span>
+        <span class="n">search_space</span><span class="o">=</span><span class="n">search_space</span><span class="p">,</span>
+        <span class="n">default_trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span>
+        <span class="n">default_runner</span><span class="o">=</span><span class="n">SyntheticRunner</span><span class="p">(),</span>
+        <span class="n">optimization_config</span><span class="o">=</span><span class="n">opt_config</span><span class="p">,</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># 4. Establish offline trial_type, and how those trials are deployed</span>
+    <span class="n">exp</span><span class="o">.</span><span class="n">add_trial_type</span><span class="p">(</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">SyntheticRunner</span><span class="p">())</span>
+    
+    <span class="c1"># 5. Add offline metrics that provide biased estimates of the online metrics</span>
+    <span class="n">offline_objective</span> <span class="o">=</span> <span class="n">OfflineHartmann6Metric</span><span class="p">(</span><span class="s2">"offline_objective"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="n">noise_sd</span><span class="p">)</span>
+    <span class="n">offline_constraint</span> <span class="o">=</span> <span class="n">OfflineL2NormMetric</span><span class="p">(</span><span class="s2">"offline_constraint"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="n">noise_sd</span><span class="p">)</span>
+    <span class="c1"># Associate each offline metric with corresponding online metric</span>
+    <span class="n">exp</span><span class="o">.</span><span class="n">add_tracking_metric</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">offline_objective</span><span class="p">,</span> <span class="n">trial_type</span><span class="o">=</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">canonical_name</span><span class="o">=</span><span class="s2">"objective"</span><span class="p">)</span>
+    <span class="n">exp</span><span class="o">.</span><span class="n">add_tracking_metric</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">offline_constraint</span><span class="p">,</span> <span class="n">trial_type</span><span class="o">=</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">canonical_name</span><span class="o">=</span><span class="s2">"constraint"</span><span class="p">)</span>
+    
+    <span class="c1"># Add a noiseless equivalent for each metric, for tracking the true value of each observation</span>
+    <span class="c1"># for the purposes of benchmarking.</span>
+    <span class="k">if</span> <span class="n">include_true_metric</span><span class="p">:</span>
+        <span class="n">exp</span><span class="o">.</span><span class="n">add_tracking_metric</span><span class="p">(</span><span class="n">Hartmann6Metric</span><span class="p">(</span><span class="s2">"objective_noiseless"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">"online"</span><span class="p">)</span>
+        <span class="n">exp</span><span class="o">.</span><span class="n">add_tracking_metric</span><span class="p">(</span><span class="n">L2NormMetric</span><span class="p">(</span><span class="s2">"constraint_noiseless"</span><span class="p">,</span> <span class="n">param_names</span><span class="o">=</span><span class="n">param_names</span><span class="p">,</span> <span class="n">noise_sd</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">"online"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exp</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="3.-Vizualize-the-simulator-bias">3. Vizualize the simulator bias<a class="anchor-link" href="#3.-Vizualize-the-simulator-bias">¶</a></h2><p>These figures compare the online measurements to the offline measurements on a random set of points, for both the objective metric and the constraint metric. You can see the offline measurements are biased but highly correlated. This produces Fig. S3 from the paper.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [4]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Generate 50 points from a Sobol sequence</span>
+<span class="n">exp</span> <span class="o">=</span> <span class="n">get_experiment</span><span class="p">(</span><span class="n">include_true_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">get_sobol</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span> <span class="n">scramble</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">gr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="c1"># Deploy them both online and offline</span>
+<span class="n">exp</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">exp</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="c1"># Fetch data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span>
+<span class="n">observations</span> <span class="o">=</span> <span class="n">observations_from_data</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="c1"># Plot the arms in batch 0 (online) vs. batch 1 (offline)</span>
+<span class="n">render</span><span class="p">(</span><span class="n">interact_batch_comparison</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:14:45] ax.modelbridge.factory: Factory functions (like `get_sobol`) will soon be deprecated. Use the model registry instead (`Models.SOBOL(...)`).
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea">
+<div class="plotly-graph-div" id="646b49ad03834e67aa852c1307578efb" style="width: 100%;"></div><script type="text/javascript">/*
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ */
+
+require(['plotly'], function(Plotly) {
+  window.PLOTLYENV = window.PLOTLYENV || {};
+  window.PLOTLYENV.BASE_URL = 'https://plot.ly';
+  /*
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ */
+
+Plotly.newPlot(
+  "646b49ad03834e67aa852c1307578efb",
+  [{"type": "scatter", "x": [0.5726220135930302, 4.21674540314745], "y": [0.5726220135930302, 4.21674540314745], "line": {"color": "black", "width": 2, "dash": "dot"}, "mode": "lines", "hoverinfo": "none", "visible": true, "showlegend": false}, {"type": "scatter", "x": [1.1739016348716487, 1.709028462278226, 2.4322258174681495, 2.2233810055212677, 2.483553785464248, 2.048021562143654, 1.4312372250566467, 1.1447209336427684, 3.662101206104428, 1.0948483130489186, 1.5239850478089714, 1.2266408311398311, 1.535301574619674, 3.0901332434211435, 2.2518337153653065, 2.170929087816998, 1.9019619650256219, 1.8050758472833588, 1.2309719731476334, 2.374882459764588, 1.1850939514546994, 2.6180621188441853, 3.418966415784092, 2.0872996927004275, 0.8288458787802349, 1.5714012759692155, 1.0154218971487015, 2.3952099671308735, 2.243786440933005, 1.043963279533768, 3.1638409311980755, 2.744438191506005, 1.243153720299655, 1.113877905411338, 2.0026350774831876, 1.6261334504585978, 2.6577519772702343, 2.3700132235655786, 1.0015484628237081, 4.02074540314745, 1.0963803485732915, 1.7057715243749947, 3.2562585616660247, 2.3321630600826766, 2.1929872769385614, 0.7753708021732266, 2.495635386356529, 1.1006015650113332, 2.226417356652089, 2.3606284600336385], "y": [1.1668098069814954, 1.417494000346734, 1.5107369420522083, 1.4463680481660475, 1.6865110648895734, 1.4998920558940891, 1.2982289253877688, 1.2571283364503578, 1.7078696356146543, 0.8768862913472991, 1.4399764850512102, 1.0578611397306377, 1.3162589743028346, 1.708366635954412, 1.387495079494395, 1.2097127927593019, 1.3402087261921838, 1.3386859389826127, 1.2932144299440727, 1.3017255817665239, 1.2107543707394777, 1.617220001243623, 1.836473617526808, 1.5740026930082753, 0.7686220135930302, 1.2567831098116617, 1.0338337465234466, 1.6505527433314842, 1.4012442163060144, 1.056726919637708, 1.7377447136603221, 1.7083379842380109, 1.3013581322847143, 1.1080967356662603, 1.3669225052751974, 1.1036229369853692, 1.5341179806173129, 1.5200576841759554, 0.9881909280418181, 2.1392311321106625, 0.8091148149379063, 1.288795155271868, 1.5734874152522755, 1.4251608176881927, 1.6150359133027017, 1.1422505376435357, 1.5731536072480392, 1.1595156875800672, 1.289859658703827, 1.44279036570966], "marker": {"color": "rgba(128,177,211,1)"}, "mode": "markers", "name": "In-sample", "text": ["<b>Arm 0_0</b><br><br>Batch 1: 1.174 [0.978, 1.370]<br>Batch 0: 1.167 [0.971, 1.363]<br><br><em>Parameterization:</em><br>x0: 0.5<br>x1: 0.5<br>x2: 0.5<br>x3: 0.5<br>x4: 0.5<br>x5: 0.5", "<b>Arm 0_1</b><br><br>Batch 1: 1.709 [1.513, 1.905]<br>Batch 0: 1.417 [1.221, 1.613]<br><br><em>Parameterization:</em><br>x0: 0.75<br>x1: 0.25<br>x2: 0.75<br>x3: 0.25<br>x4: 0.75<br>x5: 0.25", "<b>Arm 0_10</b><br><br>Batch 1: 2.432 [2.236, 2.628]<br>Batch 0: 1.511 [1.315, 1.707]<br><br><em>Parameterization:</em><br>x0: 0.4375<br>x1: 0.5625<br>x2: 0.0625<br>x3: 0.4375<br>x4: 0.8125<br>x5: 0.9375", "<b>Arm 0_11</b><br><br>Batch 1: 2.223 [2.027, 2.419]<br>Batch 0: 1.446 [1.250, 1.642]<br><br><em>Parameterization:</em><br>x0: 0.3125<br>x1: 0.1875<br>x2: 0.9375<br>x3: 0.5625<br>x4: 0.4375<br>x5: 0.8125", "<b>Arm 0_12</b><br><br>Batch 1: 2.484 [2.288, 2.680]<br>Batch 0: 1.687 [1.491, 1.883]<br><br><em>Parameterization:</em><br>x0: 0.8125<br>x1: 0.6875<br>x2: 0.4375<br>x3: 0.0625<br>x4: 0.9375<br>x5: 0.3125", "<b>Arm 0_13</b><br><br>Batch 1: 2.048 [1.852, 2.244]<br>Batch 0: 1.5 [1.304, 1.696]<br><br><em>Parameterization:</em><br>x0: 0.5625<br>x1: 0.4375<br>x2: 0.1875<br>x3: 0.8125<br>x4: 0.6875<br>x5: 0.5625", "<b>Arm 0_14</b><br><br>Batch 1: 1.431 [1.235, 1.627]<br>Batch 0: 1.298 [1.102, 1.494]<br><br><em>Parameterization:</em><br>x0: 0.0625<br>x1: 0.9375<br>x2: 0.6875<br>x3: 0.3125<br>x4: 0.1875<br>x5: 0.0625", "<b>Arm 0_15</b><br><br>Batch 1: 1.145 [0.949, 1.341]<br>Batch 0: 1.257 [1.061, 1.453]<br><br><em>Parameterization:</em><br>x0: 0.09375<br>x1: 0.46875<br>x2: 0.84375<br>x3: 0.40625<br>x4: 0.28125<br>x5: 0.34375", "<b>Arm 0_16</b><br><br>Batch 1: 3.662 [3.466, 3.858]<br>Batch 0: 1.708 [1.512, 1.904]<br><br><em>Parameterization:</em><br>x0: 0.59375<br>x1: 0.96875<br>x2: 0.34375<br>x3: 0.90625<br>x4: 0.78125<br>x5: 0.84375", "<b>Arm 0_17</b><br><br>Batch 1: 1.095 [0.899, 1.291]<br>Batch 0: 0.877 [0.681, 1.073]<br><br><em>Parameterization:</em><br>x0: 0.84375<br>x1: 0.21875<br>x2: 0.09375<br>x3: 0.15625<br>x4: 0.53125<br>x5: 0.09375", "<b>Arm 0_18</b><br><br>Batch 1: 1.524 [1.328, 1.720]<br>Batch 0: 1.44 [1.244, 1.636]<br><br><em>Parameterization:</em><br>x0: 0.34375<br>x1: 0.71875<br>x2: 0.59375<br>x3: 0.65625<br>x4: 0.03125<br>x5: 0.59375", "<b>Arm 0_19</b><br><br>Batch 1: 1.227 [1.031, 1.423]<br>Batch 0: 1.058 [0.862, 1.254]<br><br><em>Parameterization:</em><br>x0: 0.46875<br>x1: 0.09375<br>x2: 0.46875<br>x3: 0.28125<br>x4: 0.65625<br>x5: 0.71875", "<b>Arm 0_2</b><br><br>Batch 1: 1.535 [1.339, 1.731]<br>Batch 0: 1.316 [1.120, 1.512]<br><br><em>Parameterization:</em><br>x0: 0.25<br>x1: 0.75<br>x2: 0.25<br>x3: 0.75<br>x4: 0.25<br>x5: 0.75", "<b>Arm 0_20</b><br><br>Batch 1: 3.09 [2.894, 3.286]<br>Batch 0: 1.708 [1.512, 1.904]<br><br><em>Parameterization:</em><br>x0: 0.96875<br>x1: 0.59375<br>x2: 0.96875<br>x3: 0.78125<br>x4: 0.15625<br>x5: 0.21875", "<b>Arm 0_21</b><br><br>Batch 1: 2.252 [2.056, 2.448]<br>Batch 0: 1.387 [1.191, 1.583]<br><br><em>Parameterization:</em><br>x0: 0.71875<br>x1: 0.34375<br>x2: 0.71875<br>x3: 0.03125<br>x4: 0.40625<br>x5: 0.96875", "<b>Arm 0_22</b><br><br>Batch 1: 2.171 [1.975, 2.367]<br>Batch 0: 1.21 [1.014, 1.406]<br><br><em>Parameterization:</em><br>x0: 0.21875<br>x1: 0.84375<br>x2: 0.21875<br>x3: 0.53125<br>x4: 0.90625<br>x5: 0.46875", "<b>Arm 0_23</b><br><br>Batch 1: 1.902 [1.706, 2.098]<br>Batch 0: 1.34 [1.144, 1.536]<br><br><em>Parameterization:</em><br>x0: 0.15625<br>x1: 0.15625<br>x2: 0.53125<br>x3: 0.84375<br>x4: 0.84375<br>x5: 0.40625", "<b>Arm 0_24</b><br><br>Batch 1: 1.805 [1.609, 2.001]<br>Batch 0: 1.339 [1.143, 1.535]<br><br><em>Parameterization:</em><br>x0: 0.65625<br>x1: 0.65625<br>x2: 0.03125<br>x3: 0.34375<br>x4: 0.34375<br>x5: 0.90625", "<b>Arm 0_25</b><br><br>Batch 1: 1.231 [1.035, 1.427]<br>Batch 0: 1.293 [1.097, 1.489]<br><br><em>Parameterization:</em><br>x0: 0.90625<br>x1: 0.40625<br>x2: 0.28125<br>x3: 0.59375<br>x4: 0.09375<br>x5: 0.15625", "<b>Arm 0_26</b><br><br>Batch 1: 2.375 [2.179, 2.571]<br>Batch 0: 1.302 [1.106, 1.498]<br><br><em>Parameterization:</em><br>x0: 0.40625<br>x1: 0.90625<br>x2: 0.78125<br>x3: 0.09375<br>x4: 0.59375<br>x5: 0.65625", "<b>Arm 0_27</b><br><br>Batch 1: 1.185 [0.989, 1.381]<br>Batch 0: 1.211 [1.015, 1.407]<br><br><em>Parameterization:</em><br>x0: 0.28125<br>x1: 0.28125<br>x2: 0.15625<br>x3: 0.96875<br>x4: 0.21875<br>x5: 0.53125", "<b>Arm 0_28</b><br><br>Batch 1: 2.618 [2.422, 2.814]<br>Batch 0: 1.617 [1.421, 1.813]<br><br><em>Parameterization:</em><br>x0: 0.78125<br>x1: 0.78125<br>x2: 0.65625<br>x3: 0.46875<br>x4: 0.71875<br>x5: 0.03125", "<b>Arm 0_29</b><br><br>Batch 1: 3.419 [3.223, 3.615]<br>Batch 0: 1.836 [1.640, 2.032]<br><br><em>Parameterization:</em><br>x0: 0.53125<br>x1: 0.03125<br>x2: 0.90625<br>x3: 0.71875<br>x4: 0.96875<br>x5: 0.78125", "<b>Arm 0_3</b><br><br>Batch 1: 2.087 [1.891, 2.283]<br>Batch 0: 1.574 [1.378, 1.770]<br><br><em>Parameterization:</em><br>x0: 0.375<br>x1: 0.375<br>x2: 0.625<br>x3: 0.125<br>x4: 0.875<br>x5: 0.875", "<b>Arm 0_30</b><br><br>Batch 1: 0.829 [0.633, 1.025]<br>Batch 0: 0.769 [0.573, 0.965]<br><br><em>Parameterization:</em><br>x0: 0.03125<br>x1: 0.53125<br>x2: 0.40625<br>x3: 0.21875<br>x4: 0.46875<br>x5: 0.28125", "<b>Arm 0_31</b><br><br>Batch 1: 1.571 [1.375, 1.767]<br>Batch 0: 1.257 [1.061, 1.453]<br><br><em>Parameterization:</em><br>x0: 0.046875<br>x1: 0.265625<br>x2: 0.609375<br>x3: 0.578125<br>x4: 0.703125<br>x5: 0.640625", "<b>Arm 0_32</b><br><br>Batch 1: 1.015 [0.819, 1.211]<br>Batch 0: 1.034 [0.838, 1.230]<br><br><em>Parameterization:</em><br>x0: 0.546875<br>x1: 0.765625<br>x2: 0.109375<br>x3: 0.078125<br>x4: 0.203125<br>x5: 0.140625", "<b>Arm 0_33</b><br><br>Batch 1: 2.395 [2.199, 2.591]<br>Batch 0: 1.651 [1.455, 1.847]<br><br><em>Parameterization:</em><br>x0: 0.796875<br>x1: 0.015625<br>x2: 0.359375<br>x3: 0.828125<br>x4: 0.453125<br>x5: 0.890625", "<b>Arm 0_34</b><br><br>Batch 1: 2.244 [2.048, 2.440]<br>Batch 0: 1.401 [1.205, 1.597]<br><br><em>Parameterization:</em><br>x0: 0.296875<br>x1: 0.515625<br>x2: 0.859375<br>x3: 0.328125<br>x4: 0.953125<br>x5: 0.390625", "<b>Arm 0_35</b><br><br>Batch 1: 1.044 [0.848, 1.240]<br>Batch 0: 1.057 [0.861, 1.253]<br><br><em>Parameterization:</em><br>x0: 0.421875<br>x1: 0.140625<br>x2: 0.234375<br>x3: 0.703125<br>x4: 0.328125<br>x5: 0.265625", "<b>Arm 0_36</b><br><br>Batch 1: 3.164 [2.968, 3.360]<br>Batch 0: 1.738 [1.542, 1.934]<br><br><em>Parameterization:</em><br>x0: 0.921875<br>x1: 0.640625<br>x2: 0.734375<br>x3: 0.203125<br>x4: 0.828125<br>x5: 0.765625", "<b>Arm 0_37</b><br><br>Batch 1: 2.744 [2.548, 2.940]<br>Batch 0: 1.708 [1.512, 1.904]<br><br><em>Parameterization:</em><br>x0: 0.671875<br>x1: 0.390625<br>x2: 0.984375<br>x3: 0.953125<br>x4: 0.578125<br>x5: 0.015625", "<b>Arm 0_38</b><br><br>Batch 1: 1.243 [1.047, 1.439]<br>Batch 0: 1.301 [1.105, 1.497]<br><br><em>Parameterization:</em><br>x0: 0.171875<br>x1: 0.890625<br>x2: 0.484375<br>x3: 0.453125<br>x4: 0.078125<br>x5: 0.515625", "<b>Arm 0_39</b><br><br>Batch 1: 1.114 [0.918, 1.310]<br>Batch 0: 1.108 [0.912, 1.304]<br><br><em>Parameterization:</em><br>x0: 0.234375<br>x1: 0.078125<br>x2: 0.796875<br>x3: 0.140625<br>x4: 0.140625<br>x5: 0.578125", "<b>Arm 0_4</b><br><br>Batch 1: 2.003 [1.807, 2.199]<br>Batch 0: 1.367 [1.171, 1.563]<br><br><em>Parameterization:</em><br>x0: 0.875<br>x1: 0.875<br>x2: 0.125<br>x3: 0.625<br>x4: 0.375<br>x5: 0.375", "<b>Arm 0_40</b><br><br>Batch 1: 1.626 [1.430, 1.822]<br>Batch 0: 1.104 [0.908, 1.300]<br><br><em>Parameterization:</em><br>x0: 0.734375<br>x1: 0.578125<br>x2: 0.296875<br>x3: 0.640625<br>x4: 0.640625<br>x5: 0.078125", "<b>Arm 0_41</b><br><br>Batch 1: 2.658 [2.462, 2.854]<br>Batch 0: 1.534 [1.338, 1.730]<br><br><em>Parameterization:</em><br>x0: 0.984375<br>x1: 0.328125<br>x2: 0.046875<br>x3: 0.390625<br>x4: 0.890625<br>x5: 0.828125", "<b>Arm 0_42</b><br><br>Batch 1: 2.37 [2.174, 2.566]<br>Batch 0: 1.52 [1.324, 1.716]<br><br><em>Parameterization:</em><br>x0: 0.484375<br>x1: 0.828125<br>x2: 0.546875<br>x3: 0.890625<br>x4: 0.390625<br>x5: 0.328125", "<b>Arm 0_43</b><br><br>Batch 1: 1.002 [0.806, 1.198]<br>Batch 0: 0.988 [0.792, 1.184]<br><br><em>Parameterization:</em><br>x0: 0.359375<br>x1: 0.453125<br>x2: 0.421875<br>x3: 0.015625<br>x4: 0.765625<br>x5: 0.453125", "<b>Arm 0_44</b><br><br>Batch 1: 4.021 [3.825, 4.217]<br>Batch 0: 2.139 [1.943, 2.335]<br><br><em>Parameterization:</em><br>x0: 0.859375<br>x1: 0.953125<br>x2: 0.921875<br>x3: 0.515625<br>x4: 0.265625<br>x5: 0.953125", "<b>Arm 0_45</b><br><br>Batch 1: 1.096 [0.900, 1.292]<br>Batch 0: 0.809 [0.613, 1.005]<br><br><em>Parameterization:</em><br>x0: 0.609375<br>x1: 0.203125<br>x2: 0.671875<br>x3: 0.265625<br>x4: 0.015625<br>x5: 0.203125", "<b>Arm 0_46</b><br><br>Batch 1: 1.706 [1.510, 1.902]<br>Batch 0: 1.289 [1.093, 1.485]<br><br><em>Parameterization:</em><br>x0: 0.109375<br>x1: 0.703125<br>x2: 0.171875<br>x3: 0.765625<br>x4: 0.515625<br>x5: 0.703125", "<b>Arm 0_47</b><br><br>Batch 1: 3.256 [3.060, 3.452]<br>Batch 0: 1.573 [1.377, 1.769]<br><br><em>Parameterization:</em><br>x0: 0.078125<br>x1: 0.234375<br>x2: 0.265625<br>x3: 0.984375<br>x4: 0.984375<br>x5: 0.984375", "<b>Arm 0_48</b><br><br>Batch 1: 2.332 [2.136, 2.528]<br>Batch 0: 1.425 [1.229, 1.621]<br><br><em>Parameterization:</em><br>x0: 0.578125<br>x1: 0.734375<br>x2: 0.765625<br>x3: 0.484375<br>x4: 0.484375<br>x5: 0.484375", "<b>Arm 0_49</b><br><br>Batch 1: 2.193 [1.997, 2.389]<br>Batch 0: 1.615 [1.419, 1.811]<br><br><em>Parameterization:</em><br>x0: 0.828125<br>x1: 0.484375<br>x2: 0.515625<br>x3: 0.734375<br>x4: 0.234375<br>x5: 0.734375", "<b>Arm 0_5</b><br><br>Batch 1: 0.775 [0.579, 0.971]<br>Batch 0: 1.142 [0.946, 1.338]<br><br><em>Parameterization:</em><br>x0: 0.625<br>x1: 0.125<br>x2: 0.375<br>x3: 0.375<br>x4: 0.125<br>x5: 0.625", "<b>Arm 0_6</b><br><br>Batch 1: 2.496 [2.300, 2.692]<br>Batch 0: 1.573 [1.377, 1.769]<br><br><em>Parameterization:</em><br>x0: 0.125<br>x1: 0.625<br>x2: 0.875<br>x3: 0.875<br>x4: 0.625<br>x5: 0.125", "<b>Arm 0_7</b><br><br>Batch 1: 1.101 [0.905, 1.297]<br>Batch 0: 1.16 [0.964, 1.356]<br><br><em>Parameterization:</em><br>x0: 0.1875<br>x1: 0.3125<br>x2: 0.3125<br>x3: 0.6875<br>x4: 0.5625<br>x5: 0.1875", "<b>Arm 0_8</b><br><br>Batch 1: 2.226 [2.030, 2.422]<br>Batch 0: 1.29 [1.094, 1.486]<br><br><em>Parameterization:</em><br>x0: 0.6875<br>x1: 0.8125<br>x2: 0.8125<br>x3: 0.1875<br>x4: 0.0625<br>x5: 0.6875", "<b>Arm 0_9</b><br><br>Batch 1: 2.361 [2.165, 2.557]<br>Batch 0: 1.443 [1.247, 1.639]<br><br><em>Parameterization:</em><br>x0: 0.9375<br>x1: 0.0625<br>x2: 0.5625<br>x3: 0.9375<br>x4: 0.3125<br>x5: 0.4375"], "hoverinfo": "text", "error_x": {"type": "data", "array": [0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196], "color": "rgba(128,177,211,0.4)"}, "error_y": {"type": "data", "array": [0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196], "color": "rgba(128,177,211,0.4)"}, "visible": true, "showlegend": true}, {"type": "scatter", "x": [-1.7468390202605277, 2.0560863436915726], "y": [-1.7468390202605277, 2.0560863436915726], "line": {"color": "black", "width": 2, "dash": "dot"}, "mode": "lines", "hoverinfo": "none", "visible": false, "showlegend": false}, {"type": "scatter", "x": [-0.619679590456487, 1.6009314193744395, 1.6476947855674364, -0.8228978053321563, 1.5670869205645692, 1.4581562311402299, 0.33413487521106777, -0.7125508706607128, 1.7212569311374162, 1.4428078488003684, 1.1775614123877851, -0.4175152085421172, 1.2017875854449913, 1.8600863436915724, -0.7623100600087864, 1.0050048490644208, 1.4551173368596437, -0.42519519465777095, 1.7507460013914016, 1.2256100222525972, 1.5555880194451395, 0.30091054284096713, 1.705587642084504, 0.25903416129883344, -0.32556734426109235, -0.23411936989756624, 0.6739277802261421, 1.6243727995912334, 1.0425116065508229, 0.6965047518487041, 1.5670527128618157, 1.5824314546676084, 0.7610734010604001, -1.5508390202605278, 1.524799062473795, 0.5941774807781328, 1.7387759077101734, -0.15286917682778206, -0.23434108884961236, 1.5222254475004169, 1.3269796308653286, 1.7029500560492152, 1.6908213147192275, 0.2924687629378795, 0.8706367069183886, -1.2329317809242393, 0.6826182900801288, 0.8981944433126648, 0.7105187177527679, 1.6611364349358528], "y": [-0.34938952265037315, -0.16171455592240014, -0.20874842733583462, -0.4620659944139841, -0.07065709141578136, -0.010607054051085805, -0.26823297993442086, -0.5960187939787261, -0.10724384046291346, 0.05629032979642205, -0.005766625598252417, -0.4149522928266972, -0.2703864060929874, 0.04460913732886957, -0.8897370247549676, -0.0845137768151559, -0.00829522745119049, -0.3786853753073106, 0.0019198292108782503, 0.17511663123910903, -0.1180238440409079, -0.2177879956780569, -0.06795742095760454, -0.12512077303116773, -0.4540075468082125, -0.3167627773515273, -0.10439227033119523, 0.0537240250724237, -0.3028343808088031, -0.2567284832623634, -0.031753806828108376, -0.1258191095246683, -0.3104451898650515, -1.1710761450914973, 0.007886958587428987, -0.2932446386411688, -0.058552090018401795, -0.354615961692168, -0.3299407893170442, -0.1323726517023851, -0.17485100474999266, 0.2010127365471424, -0.007141306878387297, -0.3844869964672216, -0.29479156047117594, -1.1076940348318878, -0.18631139239919967, -0.20113766107791547, -0.2347524889892597, -0.2722859442354324], "marker": {"color": "rgba(128,177,211,1)"}, "mode": "markers", "name": "In-sample", "text": ["<b>Arm 0_0</b><br><br>Batch 1: -0.62 [-0.816, -0.424]<br>Batch 0: -0.349 [-0.545, -0.153]<br><br><em>Parameterization:</em><br>x0: 0.5<br>x1: 0.5<br>x2: 0.5<br>x3: 0.5<br>x4: 0.5<br>x5: 0.5", "<b>Arm 0_1</b><br><br>Batch 1: 1.601 [1.405, 1.797]<br>Batch 0: -0.162 [-0.358, 0.034]<br><br><em>Parameterization:</em><br>x0: 0.75<br>x1: 0.25<br>x2: 0.75<br>x3: 0.25<br>x4: 0.75<br>x5: 0.25", "<b>Arm 0_10</b><br><br>Batch 1: 1.648 [1.452, 1.844]<br>Batch 0: -0.209 [-0.405, -0.013]<br><br><em>Parameterization:</em><br>x0: 0.4375<br>x1: 0.5625<br>x2: 0.0625<br>x3: 0.4375<br>x4: 0.8125<br>x5: 0.9375", "<b>Arm 0_11</b><br><br>Batch 1: -0.823 [-1.019, -0.627]<br>Batch 0: -0.462 [-0.658, -0.266]<br><br><em>Parameterization:</em><br>x0: 0.3125<br>x1: 0.1875<br>x2: 0.9375<br>x3: 0.5625<br>x4: 0.4375<br>x5: 0.8125", "<b>Arm 0_12</b><br><br>Batch 1: 1.567 [1.371, 1.763]<br>Batch 0: -0.071 [-0.267, 0.125]<br><br><em>Parameterization:</em><br>x0: 0.8125<br>x1: 0.6875<br>x2: 0.4375<br>x3: 0.0625<br>x4: 0.9375<br>x5: 0.3125", "<b>Arm 0_13</b><br><br>Batch 1: 1.458 [1.262, 1.654]<br>Batch 0: -0.011 [-0.207, 0.185]<br><br><em>Parameterization:</em><br>x0: 0.5625<br>x1: 0.4375<br>x2: 0.1875<br>x3: 0.8125<br>x4: 0.6875<br>x5: 0.5625", "<b>Arm 0_14</b><br><br>Batch 1: 0.334 [0.138, 0.530]<br>Batch 0: -0.268 [-0.464, -0.072]<br><br><em>Parameterization:</em><br>x0: 0.0625<br>x1: 0.9375<br>x2: 0.6875<br>x3: 0.3125<br>x4: 0.1875<br>x5: 0.0625", "<b>Arm 0_15</b><br><br>Batch 1: -0.713 [-0.909, -0.517]<br>Batch 0: -0.596 [-0.792, -0.400]<br><br><em>Parameterization:</em><br>x0: 0.09375<br>x1: 0.46875<br>x2: 0.84375<br>x3: 0.40625<br>x4: 0.28125<br>x5: 0.34375", "<b>Arm 0_16</b><br><br>Batch 1: 1.721 [1.525, 1.917]<br>Batch 0: -0.107 [-0.303, 0.089]<br><br><em>Parameterization:</em><br>x0: 0.59375<br>x1: 0.96875<br>x2: 0.34375<br>x3: 0.90625<br>x4: 0.78125<br>x5: 0.84375", "<b>Arm 0_17</b><br><br>Batch 1: 1.443 [1.247, 1.639]<br>Batch 0: 0.056 [-0.140, 0.252]<br><br><em>Parameterization:</em><br>x0: 0.84375<br>x1: 0.21875<br>x2: 0.09375<br>x3: 0.15625<br>x4: 0.53125<br>x5: 0.09375", "<b>Arm 0_18</b><br><br>Batch 1: 1.178 [0.982, 1.374]<br>Batch 0: -0.006 [-0.202, 0.190]<br><br><em>Parameterization:</em><br>x0: 0.34375<br>x1: 0.71875<br>x2: 0.59375<br>x3: 0.65625<br>x4: 0.03125<br>x5: 0.59375", "<b>Arm 0_19</b><br><br>Batch 1: -0.418 [-0.614, -0.222]<br>Batch 0: -0.415 [-0.611, -0.219]<br><br><em>Parameterization:</em><br>x0: 0.46875<br>x1: 0.09375<br>x2: 0.46875<br>x3: 0.28125<br>x4: 0.65625<br>x5: 0.71875", "<b>Arm 0_2</b><br><br>Batch 1: 1.202 [1.006, 1.398]<br>Batch 0: -0.27 [-0.466, -0.074]<br><br><em>Parameterization:</em><br>x0: 0.25<br>x1: 0.75<br>x2: 0.25<br>x3: 0.75<br>x4: 0.25<br>x5: 0.75", "<b>Arm 0_20</b><br><br>Batch 1: 1.86 [1.664, 2.056]<br>Batch 0: 0.045 [-0.151, 0.241]<br><br><em>Parameterization:</em><br>x0: 0.96875<br>x1: 0.59375<br>x2: 0.96875<br>x3: 0.78125<br>x4: 0.15625<br>x5: 0.21875", "<b>Arm 0_21</b><br><br>Batch 1: -0.762 [-0.958, -0.566]<br>Batch 0: -0.89 [-1.086, -0.694]<br><br><em>Parameterization:</em><br>x0: 0.71875<br>x1: 0.34375<br>x2: 0.71875<br>x3: 0.03125<br>x4: 0.40625<br>x5: 0.96875", "<b>Arm 0_22</b><br><br>Batch 1: 1.005 [0.809, 1.201]<br>Batch 0: -0.085 [-0.281, 0.111]<br><br><em>Parameterization:</em><br>x0: 0.21875<br>x1: 0.84375<br>x2: 0.21875<br>x3: 0.53125<br>x4: 0.90625<br>x5: 0.46875", "<b>Arm 0_23</b><br><br>Batch 1: 1.455 [1.259, 1.651]<br>Batch 0: -0.008 [-0.204, 0.188]<br><br><em>Parameterization:</em><br>x0: 0.15625<br>x1: 0.15625<br>x2: 0.53125<br>x3: 0.84375<br>x4: 0.84375<br>x5: 0.40625", "<b>Arm 0_24</b><br><br>Batch 1: -0.425 [-0.621, -0.229]<br>Batch 0: -0.379 [-0.575, -0.183]<br><br><em>Parameterization:</em><br>x0: 0.65625<br>x1: 0.65625<br>x2: 0.03125<br>x3: 0.34375<br>x4: 0.34375<br>x5: 0.90625", "<b>Arm 0_25</b><br><br>Batch 1: 1.751 [1.555, 1.947]<br>Batch 0: 0.002 [-0.194, 0.198]<br><br><em>Parameterization:</em><br>x0: 0.90625<br>x1: 0.40625<br>x2: 0.28125<br>x3: 0.59375<br>x4: 0.09375<br>x5: 0.15625", "<b>Arm 0_26</b><br><br>Batch 1: 1.226 [1.030, 1.422]<br>Batch 0: 0.175 [-0.021, 0.371]<br><br><em>Parameterization:</em><br>x0: 0.40625<br>x1: 0.90625<br>x2: 0.78125<br>x3: 0.09375<br>x4: 0.59375<br>x5: 0.65625", "<b>Arm 0_27</b><br><br>Batch 1: 1.556 [1.360, 1.752]<br>Batch 0: -0.118 [-0.314, 0.078]<br><br><em>Parameterization:</em><br>x0: 0.28125<br>x1: 0.28125<br>x2: 0.15625<br>x3: 0.96875<br>x4: 0.21875<br>x5: 0.53125", "<b>Arm 0_28</b><br><br>Batch 1: 0.301 [0.105, 0.497]<br>Batch 0: -0.218 [-0.414, -0.022]<br><br><em>Parameterization:</em><br>x0: 0.78125<br>x1: 0.78125<br>x2: 0.65625<br>x3: 0.46875<br>x4: 0.71875<br>x5: 0.03125", "<b>Arm 0_29</b><br><br>Batch 1: 1.706 [1.510, 1.902]<br>Batch 0: -0.068 [-0.264, 0.128]<br><br><em>Parameterization:</em><br>x0: 0.53125<br>x1: 0.03125<br>x2: 0.90625<br>x3: 0.71875<br>x4: 0.96875<br>x5: 0.78125", "<b>Arm 0_3</b><br><br>Batch 1: 0.259 [0.063, 0.455]<br>Batch 0: -0.125 [-0.321, 0.071]<br><br><em>Parameterization:</em><br>x0: 0.375<br>x1: 0.375<br>x2: 0.625<br>x3: 0.125<br>x4: 0.875<br>x5: 0.875", "<b>Arm 0_30</b><br><br>Batch 1: -0.326 [-0.522, -0.130]<br>Batch 0: -0.454 [-0.650, -0.258]<br><br><em>Parameterization:</em><br>x0: 0.03125<br>x1: 0.53125<br>x2: 0.40625<br>x3: 0.21875<br>x4: 0.46875<br>x5: 0.28125", "<b>Arm 0_31</b><br><br>Batch 1: -0.234 [-0.430, -0.038]<br>Batch 0: -0.317 [-0.513, -0.121]<br><br><em>Parameterization:</em><br>x0: 0.046875<br>x1: 0.265625<br>x2: 0.609375<br>x3: 0.578125<br>x4: 0.703125<br>x5: 0.640625", "<b>Arm 0_32</b><br><br>Batch 1: 0.674 [0.478, 0.870]<br>Batch 0: -0.104 [-0.300, 0.092]<br><br><em>Parameterization:</em><br>x0: 0.546875<br>x1: 0.765625<br>x2: 0.109375<br>x3: 0.078125<br>x4: 0.203125<br>x5: 0.140625", "<b>Arm 0_33</b><br><br>Batch 1: 1.624 [1.428, 1.820]<br>Batch 0: 0.054 [-0.142, 0.250]<br><br><em>Parameterization:</em><br>x0: 0.796875<br>x1: 0.015625<br>x2: 0.359375<br>x3: 0.828125<br>x4: 0.453125<br>x5: 0.890625", "<b>Arm 0_34</b><br><br>Batch 1: 1.043 [0.847, 1.239]<br>Batch 0: -0.303 [-0.499, -0.107]<br><br><em>Parameterization:</em><br>x0: 0.296875<br>x1: 0.515625<br>x2: 0.859375<br>x3: 0.328125<br>x4: 0.953125<br>x5: 0.390625", "<b>Arm 0_35</b><br><br>Batch 1: 0.697 [0.501, 0.893]<br>Batch 0: -0.257 [-0.453, -0.061]<br><br><em>Parameterization:</em><br>x0: 0.421875<br>x1: 0.140625<br>x2: 0.234375<br>x3: 0.703125<br>x4: 0.328125<br>x5: 0.265625", "<b>Arm 0_36</b><br><br>Batch 1: 1.567 [1.371, 1.763]<br>Batch 0: -0.032 [-0.228, 0.164]<br><br><em>Parameterization:</em><br>x0: 0.921875<br>x1: 0.640625<br>x2: 0.734375<br>x3: 0.203125<br>x4: 0.828125<br>x5: 0.765625", "<b>Arm 0_37</b><br><br>Batch 1: 1.582 [1.386, 1.778]<br>Batch 0: -0.126 [-0.322, 0.070]<br><br><em>Parameterization:</em><br>x0: 0.671875<br>x1: 0.390625<br>x2: 0.984375<br>x3: 0.953125<br>x4: 0.578125<br>x5: 0.015625", "<b>Arm 0_38</b><br><br>Batch 1: 0.761 [0.565, 0.957]<br>Batch 0: -0.31 [-0.506, -0.114]<br><br><em>Parameterization:</em><br>x0: 0.171875<br>x1: 0.890625<br>x2: 0.484375<br>x3: 0.453125<br>x4: 0.078125<br>x5: 0.515625", "<b>Arm 0_39</b><br><br>Batch 1: -1.551 [-1.747, -1.355]<br>Batch 0: -1.171 [-1.367, -0.975]<br><br><em>Parameterization:</em><br>x0: 0.234375<br>x1: 0.078125<br>x2: 0.796875<br>x3: 0.140625<br>x4: 0.140625<br>x5: 0.578125", "<b>Arm 0_4</b><br><br>Batch 1: 1.525 [1.329, 1.721]<br>Batch 0: 0.008 [-0.188, 0.204]<br><br><em>Parameterization:</em><br>x0: 0.875<br>x1: 0.875<br>x2: 0.125<br>x3: 0.625<br>x4: 0.375<br>x5: 0.375", "<b>Arm 0_40</b><br><br>Batch 1: 0.594 [0.398, 0.790]<br>Batch 0: -0.293 [-0.489, -0.097]<br><br><em>Parameterization:</em><br>x0: 0.734375<br>x1: 0.578125<br>x2: 0.296875<br>x3: 0.640625<br>x4: 0.640625<br>x5: 0.078125", "<b>Arm 0_41</b><br><br>Batch 1: 1.739 [1.543, 1.935]<br>Batch 0: -0.059 [-0.255, 0.137]<br><br><em>Parameterization:</em><br>x0: 0.984375<br>x1: 0.328125<br>x2: 0.046875<br>x3: 0.390625<br>x4: 0.890625<br>x5: 0.828125", "<b>Arm 0_42</b><br><br>Batch 1: -0.153 [-0.349, 0.043]<br>Batch 0: -0.355 [-0.551, -0.159]<br><br><em>Parameterization:</em><br>x0: 0.484375<br>x1: 0.828125<br>x2: 0.546875<br>x3: 0.890625<br>x4: 0.390625<br>x5: 0.328125", "<b>Arm 0_43</b><br><br>Batch 1: -0.234 [-0.430, -0.038]<br>Batch 0: -0.33 [-0.526, -0.134]<br><br><em>Parameterization:</em><br>x0: 0.359375<br>x1: 0.453125<br>x2: 0.421875<br>x3: 0.015625<br>x4: 0.765625<br>x5: 0.453125", "<b>Arm 0_44</b><br><br>Batch 1: 1.522 [1.326, 1.718]<br>Batch 0: -0.132 [-0.328, 0.064]<br><br><em>Parameterization:</em><br>x0: 0.859375<br>x1: 0.953125<br>x2: 0.921875<br>x3: 0.515625<br>x4: 0.265625<br>x5: 0.953125", "<b>Arm 0_45</b><br><br>Batch 1: 1.327 [1.131, 1.523]<br>Batch 0: -0.175 [-0.371, 0.021]<br><br><em>Parameterization:</em><br>x0: 0.609375<br>x1: 0.203125<br>x2: 0.671875<br>x3: 0.265625<br>x4: 0.015625<br>x5: 0.203125", "<b>Arm 0_46</b><br><br>Batch 1: 1.703 [1.507, 1.899]<br>Batch 0: 0.201 [0.005, 0.397]<br><br><em>Parameterization:</em><br>x0: 0.109375<br>x1: 0.703125<br>x2: 0.171875<br>x3: 0.765625<br>x4: 0.515625<br>x5: 0.703125", "<b>Arm 0_47</b><br><br>Batch 1: 1.691 [1.495, 1.887]<br>Batch 0: -0.007 [-0.203, 0.189]<br><br><em>Parameterization:</em><br>x0: 0.078125<br>x1: 0.234375<br>x2: 0.265625<br>x3: 0.984375<br>x4: 0.984375<br>x5: 0.984375", "<b>Arm 0_48</b><br><br>Batch 1: 0.292 [0.096, 0.488]<br>Batch 0: -0.384 [-0.580, -0.188]<br><br><em>Parameterization:</em><br>x0: 0.578125<br>x1: 0.734375<br>x2: 0.765625<br>x3: 0.484375<br>x4: 0.484375<br>x5: 0.484375", "<b>Arm 0_49</b><br><br>Batch 1: 0.871 [0.675, 1.067]<br>Batch 0: -0.295 [-0.491, -0.099]<br><br><em>Parameterization:</em><br>x0: 0.828125<br>x1: 0.484375<br>x2: 0.515625<br>x3: 0.734375<br>x4: 0.234375<br>x5: 0.734375", "<b>Arm 0_5</b><br><br>Batch 1: -1.233 [-1.429, -1.037]<br>Batch 0: -1.108 [-1.304, -0.912]<br><br><em>Parameterization:</em><br>x0: 0.625<br>x1: 0.125<br>x2: 0.375<br>x3: 0.375<br>x4: 0.125<br>x5: 0.625", "<b>Arm 0_6</b><br><br>Batch 1: 0.683 [0.487, 0.879]<br>Batch 0: -0.186 [-0.382, 0.010]<br><br><em>Parameterization:</em><br>x0: 0.125<br>x1: 0.625<br>x2: 0.875<br>x3: 0.875<br>x4: 0.625<br>x5: 0.125", "<b>Arm 0_7</b><br><br>Batch 1: 0.898 [0.702, 1.094]<br>Batch 0: -0.201 [-0.397, -0.005]<br><br><em>Parameterization:</em><br>x0: 0.1875<br>x1: 0.3125<br>x2: 0.3125<br>x3: 0.6875<br>x4: 0.5625<br>x5: 0.1875", "<b>Arm 0_8</b><br><br>Batch 1: 0.711 [0.515, 0.907]<br>Batch 0: -0.235 [-0.431, -0.039]<br><br><em>Parameterization:</em><br>x0: 0.6875<br>x1: 0.8125<br>x2: 0.8125<br>x3: 0.1875<br>x4: 0.0625<br>x5: 0.6875", "<b>Arm 0_9</b><br><br>Batch 1: 1.661 [1.465, 1.857]<br>Batch 0: -0.272 [-0.468, -0.076]<br><br><em>Parameterization:</em><br>x0: 0.9375<br>x1: 0.0625<br>x2: 0.5625<br>x3: 0.9375<br>x4: 0.3125<br>x5: 0.4375"], "hoverinfo": "text", "error_x": {"type": "data", "array": [0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196], "color": "rgba(128,177,211,0.4)"}, "error_y": {"type": "data", "array": [0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196, 0.196], "color": "rgba(128,177,211,0.4)"}, "visible": false, "showlegend": true}],
+  {"annotations": [{"showarrow": false, "text": "Show CI", "x": 1.125, "xanchor": "left", "xref": "paper", "y": 0.9, "yanchor": "middle", "yref": "paper"}], "xaxis": {"title": "Batch 1", "zeroline": false, "mirror": true, "linecolor": "black", "linewidth": 0.5}, "yaxis": {"title": "Batch 0", "zeroline": false, "mirror": true, "linecolor": "black", "linewidth": 0.5}, "showlegend": false, "hovermode": "closest", "updatemenus": [{"x": 0, "y": 1.125, "yanchor": "top", "xanchor": "left", "buttons": [{"args": ["visible", [true, true, false, false]], "label": "constraint", "method": "restyle"}, {"args": ["visible", [false, false, true, true]], "label": "objective", "method": "restyle"}]}, {"buttons": [{"args": [{"error_x.width": 4, "error_x.thickness": 2, "error_y.width": 4, "error_y.thickness": 2}], "label": "Yes", "method": "restyle"}, {"args": [{"error_x.width": 0, "error_x.thickness": 0, "error_y.width": 0, "error_y.thickness": 0}], "label": "No", "method": "restyle"}], "x": 1.125, "xanchor": "left", "y": 0.8, "yanchor": "middle"}], "width": 530, "height": 500, "title": "Repeated arms across trials"},
+  {"showLink": false}
+);
+});</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="4.-The-Bayesian-optimization-loop">4. The Bayesian optimization loop<a class="anchor-link" href="#4.-The-Bayesian-optimization-loop">¶</a></h2><p>Here we construct a Bayesian optimization loop that interleaves online and offline batches. The loop defined here is described in Algorithm 1 of the paper. We compare multi-task Bayesian optimization to regular Bayesian optimization using only online observations.</p>
+<p>Here we measure performance over 3 repetitions of the loop. Each one takes 1-2 hours so the whole benchmark run will take several hours to complete.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [5]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Settings for the optimization benchmark.</span>
+
+<span class="c1"># This should be changed to 50 to reproduce the results from the paper.</span>
+<span class="n">n_reps</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Number of repeated experiments, each with independent observation noise</span>
+
+<span class="n">n_init_online</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Size of the quasirandom initialization run online</span>
+<span class="n">n_init_offline</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Size of the quasirandom initialization run offline</span>
+<span class="n">n_opt_online</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Batch size for BO selected points to be run online</span>
+<span class="n">n_opt_offline</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Batch size for BO selected to be run offline</span>
+<span class="n">n_batches</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Number of optimized BO batches</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="4a.-Optimization-with-online-observations-only">4a. Optimization with online observations only<a class="anchor-link" href="#4a.-Optimization-with-online-observations-only">¶</a></h4><p>For the online-only case, we run <code>n_init_online</code> sobol points followed by <code>n_batches</code> batches of <code>n_opt_online</code> points selected by the GP. This is a normal Bayesian optimization loop.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [6]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># This function runs a Bayesian optimization loop, making online observations only.</span>
+<span class="k">def</span> <span class="nf">run_online_only_bo</span><span class="p">():</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1">### Do BO with online only</span>
+    <span class="c1">## Quasi-random initialization</span>
+    <span class="n">exp_online</span> <span class="o">=</span> <span class="n">get_experiment</span><span class="p">()</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">get_sobol</span><span class="p">(</span><span class="n">exp_online</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span> <span class="n">scramble</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n_init_online</span><span class="p">)</span>
+    <span class="n">exp_online</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="c1">## Do BO</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_batches</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'Online-only batch'</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span>
+        <span class="c1"># Fit the GP</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">get_GPEI</span><span class="p">(</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="n">exp_online</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">exp_online</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">(),</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">exp_online</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Generate the new batch</span>
+        <span class="n">gr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">n_opt_online</span><span class="p">,</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">exp_online</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span>
+            <span class="n">optimization_config</span><span class="o">=</span><span class="n">exp_online</span><span class="o">.</span><span class="n">optimization_config</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">exp_online</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="c1">## Extract true objective and constraint at each iteration</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">exp_online</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span><span class="o">.</span><span class="n">df</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'metric_name'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'objective_noiseless'</span><span class="p">][</span><span class="s1">'mean'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">con</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'metric_name'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'constraint_noiseless'</span><span class="p">][</span><span class="s1">'mean'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="p">,</span> <span class="n">con</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="4b.-Multi-task-Bayesian-optimization">4b. Multi-task Bayesian optimization<a class="anchor-link" href="#4b.-Multi-task-Bayesian-optimization">¶</a></h4><p>Here we incorporate offline observations to accelerate the optimization, while using the same total number of online observations as in the loop above. The strategy here is that outlined in Algorithm 1 of the paper.</p>
+<ol>
+<li><b> Initialization</b> - Run <code>n_init_online</code> Sobol points online, and <code>n_init_offline</code> Sobol points offline.</li>
+<li><b> Fit model </b> - Fit an MTGP to both online and offline observations.</li>
+<li><b> Generate candidates </b> - Generate <code>n_opt_offline</code> candidates using NEI.</li>
+<li><b> Launch offline batch </b> - Run the <code>n_opt_offline</code> candidates offline and observe their offline metrics.</li>
+<li><b> Update model </b> - Update the MTGP with the new offline observations.</li>
+<li><b> Select points for online batch </b> - Select the best (maximum utility) <code>n_opt_online</code> of the NEI candidates, after incorporating their offline observations, and run them online.</li>
+<li><b> Update model and repeat </b> - Update the model with the online observations, and repeat from step 3 for the next batch.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [7]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Online batches are constructed by selecting the maximum utility points from the offline</span>
+<span class="c1"># batch, after updating the model with the offline results. This function selects the max utility points according</span>
+<span class="c1"># to the MTGP predictions.</span>
+<span class="k">def</span> <span class="nf">max_utility_from_GP</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">search_space</span><span class="p">,</span> <span class="n">gr</span><span class="p">):</span>
+    <span class="n">obsf</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">gr</span><span class="o">.</span><span class="n">arms</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">arm</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">'trial_type'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'online'</span>
+        <span class="n">obsf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ObservationFeatures</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">params</span><span class="p">))</span>
+    <span class="c1"># Make predictions</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">obsf</span><span class="p">)</span>
+    <span class="c1"># Compute expected utility</span>
+    <span class="n">mu_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">'constraint'</span><span class="p">])</span>
+    <span class="n">sigma_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="s1">'constraint'</span><span class="p">][</span><span class="s1">'constraint'</span><span class="p">])</span>
+    <span class="n">pfeas</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="mf">1.25</span> <span class="o">-</span> <span class="n">mu_c</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_c</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">'objective'</span><span class="p">])</span> <span class="o">*</span> <span class="n">pfeas</span>
+    <span class="n">best_arm_indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">u</span><span class="p">))[:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">gr_new</span> <span class="o">=</span> <span class="n">GeneratorRun</span><span class="p">(</span>
+        <span class="n">arms</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">gr</span><span class="o">.</span><span class="n">arms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">best_arm_indx</span>
+        <span class="p">],</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">gr_new</span>
+
+<span class="c1"># This function runs a multi-task Bayesian optimization loop, as outlined in Algorithm 1 and above.</span>
+<span class="k">def</span> <span class="nf">run_mtbo</span><span class="p">():</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">online_trials</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">## 1. Quasi-random initialization, online and offline</span>
+    <span class="n">exp_multitask</span> <span class="o">=</span> <span class="n">get_experiment</span><span class="p">()</span>
+    <span class="c1"># Online points</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">get_sobol</span><span class="p">(</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span> <span class="n">scramble</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">n_init_online</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">tr</span> <span class="o">=</span> <span class="n">exp_multitask</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="n">online_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="c1"># Offline points</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">get_sobol</span><span class="p">(</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span> <span class="n">scramble</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">n_init_offline</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">exp_multitask</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="c1">## Do BO</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_batches</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'Multi-task batch'</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span>
+        <span class="c1"># (2 / 7). Fit the MTGP</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">get_MTGP</span><span class="p">(</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="n">exp_multitask</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">(),</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 3. Finding the best points for the online task</span>
+        <span class="n">gr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">n_opt_offline</span><span class="p">,</span>
+            <span class="n">optimization_config</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">optimization_config</span><span class="p">,</span>
+            <span class="n">fixed_features</span><span class="o">=</span><span class="n">ObservationFeatures</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">'trial_type'</span><span class="p">:</span> <span class="s1">'online'</span><span class="p">}),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 4. But launch them offline</span>
+        <span class="n">exp_multitask</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"offline"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        
+        <span class="c1"># 5. Update the model</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">get_MTGP</span><span class="p">(</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="n">exp_multitask</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">(),</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># 6. Select max-utility points from the offline batch to generate an online batch</span>
+        <span class="n">gr</span> <span class="o">=</span> <span class="n">max_utility_from_GP</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">n_opt_online</span><span class="p">,</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="n">exp_multitask</span><span class="p">,</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">exp_multitask</span><span class="o">.</span><span class="n">search_space</span><span class="p">,</span>
+            <span class="n">gr</span><span class="o">=</span><span class="n">gr</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">exp_multitask</span><span class="o">.</span><span class="n">new_batch_trial</span><span class="p">(</span><span class="n">trial_type</span><span class="o">=</span><span class="s2">"online"</span><span class="p">,</span> <span class="n">generator_run</span><span class="o">=</span><span class="n">gr</span><span class="p">)</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="n">online_trials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="c1"># Extract true objective at each online iteration for creating benchmark plot</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">con</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">online_trials</span><span class="p">:</span>
+        <span class="n">df_t</span> <span class="o">=</span> <span class="n">exp_multitask</span><span class="o">.</span><span class="n">trials</span><span class="p">[</span><span class="n">tr</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span><span class="o">.</span><span class="n">df</span>
+        <span class="n">df_tobj</span> <span class="o">=</span> <span class="n">df_t</span><span class="p">[</span><span class="n">df_t</span><span class="p">[</span><span class="s1">'metric_name'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'objective_noiseless'</span><span class="p">]</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">obj</span><span class="p">,</span> <span class="n">df_tobj</span><span class="p">[</span><span class="s1">'mean'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">df_tcon</span> <span class="o">=</span> <span class="n">df_t</span><span class="p">[</span><span class="n">df_t</span><span class="p">[</span><span class="s1">'metric_name'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'constraint_noiseless'</span><span class="p">]</span>
+        <span class="n">con</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">con</span><span class="p">,</span> <span class="n">df_tcon</span><span class="p">[</span><span class="s1">'mean'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="p">,</span> <span class="n">con</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="4c.-Run-both-loops">4c. Run both loops<a class="anchor-link" href="#4c.-Run-both-loops">¶</a></h4><p>Run both Bayesian optimization loops and aggregate results.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [8]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">runners</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'GP, online only'</span><span class="p">:</span> <span class="n">run_online_only_bo</span><span class="p">,</span>
+    <span class="s1">'MTGP, Algorithm 1'</span><span class="p">:</span> <span class="n">run_mtbo</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">iteration_objectives</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">runners</span><span class="p">}</span>
+<span class="n">iteration_constraints</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">runners</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_reps</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'Running rep'</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">runners</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">con</span> <span class="o">=</span> <span class="n">r</span><span class="p">()</span>
+        <span class="n">iteration_objectives</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">iteration_constraints</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">iteration_objectives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">iteration_objectives</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">iteration_constraints</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">iteration_constraints</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:14:45] ax.modelbridge.factory: Factory functions (like `get_sobol`) will soon be deprecated. Use the model registry instead (`Models.SOBOL(...)`).
+[INFO 08-04 00:14:45] ax.modelbridge.factory: Factory functions (like `get_GPEI`) will soon be deprecated). Use the model registry instead (`Models.GPEI(...)`).
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Running rep 0
+Online-only batch 0 0.0062961578369140625
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:15:57] ax.modelbridge.factory: Factory functions (like `get_GPEI`) will soon be deprecated). Use the model registry instead (`Models.GPEI(...)`).
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Online-only batch 1 72.23512196540833
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:17:53] ax.modelbridge.factory: Factory functions (like `get_GPEI`) will soon be deprecated). Use the model registry instead (`Models.GPEI(...)`).
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Online-only batch 2 187.76053929328918
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO 08-04 00:19:32] ax.modelbridge.factory: Factory functions (like `get_sobol`) will soon be deprecated. Use the model registry instead (`Models.SOBOL(...)`).
+[INFO 08-04 00:19:32] ax.modelbridge.factory: Factory functions (like `get_sobol`) will soon be deprecated. Use the model registry instead (`Models.SOBOL(...)`).
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Multi-task batch 0 0.026762962341308594
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-8-6f5702c98588&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>     print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">'Running rep'</span><span class="ansi-blue-fg">,</span> rep<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>     <span class="ansi-green-fg">for</span> k<span class="ansi-blue-fg">,</span> r <span class="ansi-green-fg">in</span> runners<span class="ansi-blue-fg">.</span>items<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg">         </span>obj<span class="ansi-blue-fg">,</span> con <span class="ansi-blue-fg">=</span> r<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span>         iteration_objectives<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>obj<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>         iteration_constraints<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>con<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-7-88fb8b2e972e&gt;</span> in <span class="ansi-cyan-fg">run_mtbo</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     51</span>             experiment<span class="ansi-blue-fg">=</span>exp_multitask<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     52</span>             data<span class="ansi-blue-fg">=</span>exp_multitask<span class="ansi-blue-fg">.</span>fetch_data<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">---&gt; 53</span><span class="ansi-red-fg">             </span>search_space<span class="ansi-blue-fg">=</span>exp_multitask<span class="ansi-blue-fg">.</span>search_space<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     54</span>         )
+<span class="ansi-green-intense-fg ansi-bold">     55</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/factory.py</span> in <span class="ansi-cyan-fg">get_MTGP</span><span class="ansi-blue-fg">(experiment, data, is_multi_type, search_space)</span>
+<span class="ansi-green-intense-fg ansi-bold">    225</span>         transform_configs<span class="ansi-blue-fg">=</span>transform_configs<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    226</span>         torch_dtype<span class="ansi-blue-fg">=</span>torch<span class="ansi-blue-fg">.</span>double<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 227</span><span class="ansi-red-fg">         </span>torch_device<span class="ansi-blue-fg">=</span>DEFAULT_TORCH_DEVICE<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    228</span>     )
+<span class="ansi-green-intense-fg ansi-bold">    229</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/torch.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, experiment, search_space, data, model, transforms, transform_configs, torch_dtype, torch_device, status_quo_name, status_quo_features, optimization_config)</span>
+<span class="ansi-green-intense-fg ansi-bold">     66</span>             status_quo_name<span class="ansi-blue-fg">=</span>status_quo_name<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     67</span>             status_quo_features<span class="ansi-blue-fg">=</span>status_quo_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">             </span>optimization_config<span class="ansi-blue-fg">=</span>optimization_config<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span>         )
+<span class="ansi-green-intense-fg ansi-bold">     70</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/base.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, search_space, model, transforms, experiment, data, transform_configs, status_quo_name, status_quo_features, optimization_config)</span>
+<span class="ansi-green-intense-fg ansi-bold">    150</span>                 search_space<span class="ansi-blue-fg">=</span>search_space<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    151</span>                 observation_features<span class="ansi-blue-fg">=</span>obs_feats<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 152</span><span class="ansi-red-fg">                 </span>observation_data<span class="ansi-blue-fg">=</span>obs_data<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    153</span>             )
+<span class="ansi-green-intense-fg ansi-bold">    154</span>             self<span class="ansi-blue-fg">.</span>fit_time <span class="ansi-blue-fg">=</span> time<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-</span> t_fit_start
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/torch.py</span> in <span class="ansi-cyan-fg">_fit</span><span class="ansi-blue-fg">(self, model, search_space, observation_features, observation_data)</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span>             search_space<span class="ansi-blue-fg">=</span>search_space<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     81</span>             observation_features<span class="ansi-blue-fg">=</span>observation_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">---&gt; 82</span><span class="ansi-red-fg">             </span>observation_data<span class="ansi-blue-fg">=</span>observation_data<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     83</span>         )
+<span class="ansi-green-intense-fg ansi-bold">     84</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/array.py</span> in <span class="ansi-cyan-fg">_fit</span><span class="ansi-blue-fg">(self, model, search_space, observation_features, observation_data)</span>
+<span class="ansi-green-intense-fg ansi-bold">     79</span>             task_features<span class="ansi-blue-fg">=</span>task_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span>             feature_names<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">---&gt; 81</span><span class="ansi-red-fg">             </span>fidelity_features<span class="ansi-blue-fg">=</span>fidelity_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     82</span>         )
+<span class="ansi-green-intense-fg ansi-bold">     83</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/modelbridge/torch.py</span> in <span class="ansi-cyan-fg">_model_fit</span><span class="ansi-blue-fg">(self, model, Xs, Ys, Yvars, bounds, task_features, feature_names, fidelity_features)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>             task_features<span class="ansi-blue-fg">=</span>task_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>             feature_names<span class="ansi-blue-fg">=</span>feature_names<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">             </span>fidelity_features<span class="ansi-blue-fg">=</span>fidelity_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         )
+<span class="ansi-green-intense-fg ansi-bold">    110</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/models/torch/botorch.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, Xs, Ys, Yvars, bounds, task_features, feature_names, fidelity_features)</span>
+<span class="ansi-green-intense-fg ansi-bold">    227</span>             Yvars<span class="ansi-blue-fg">=</span>Yvars<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    228</span>             task_features<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>task_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 229</span><span class="ansi-red-fg">             </span>fidelity_features<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>fidelity_features<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    230</span>         )
+<span class="ansi-green-intense-fg ansi-bold">    231</span> 
+
+<span class="ansi-green-fg">/anaconda3/lib/python3.7/site-packages/ax/models/torch/botorch_defaults.py</span> in <span class="ansi-cyan-fg">get_and_fit_model</span><span class="ansi-blue-fg">(Xs, Ys, Yvars, task_features, fidelity_features, state_dict, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     76</span>             <span class="ansi-green-fg">for</span> X<span class="ansi-blue-fg">,</span> Y<span class="ansi-blue-fg">,</span> Yvar <span class="ansi-green-fg">in</span> zip<span class="ansi-blue-fg">(</span>Xs<span class="ansi-blue-fg">,</span> Ys<span class="ansi-blue-fg">,</span> Yvars<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>         ]
+<span class="ansi-green-fg">---&gt; 78</span><span class="ansi-red-fg">         </span>model <span class="ansi-blue-fg">=</span> ModelListGP<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>models<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     79</span>     model<span class="ansi-blue-fg">.</span>to<span class="ansi-blue-fg">(</span>dtype<span class="ansi-blue-fg">=</span>Xs<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>dtype<span class="ansi-blue-fg">,</span> device<span class="ansi-blue-fg">=</span>Xs<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>device<span class="ansi-blue-fg">)</span>  <span class="ansi-red-fg"># pyre-ignore</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span>     <span class="ansi-green-fg">if</span> state_dict <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">TypeError</span>: __init__() takes 2 positional arguments but 5 were given</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="5.-Plot-results">5. Plot results<a class="anchor-link" href="#5.-Plot-results">¶</a></h2><p>We plot the cumulative best point found by each online iteration of the optimization for each of the methods. We see that despite the bias in the offline observations, incorporating them into the optimziation with the multi-task model allows the optimization to converge to the optimal point much faster. With n_reps=50, this generates Fig. S4 of the paper.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [23]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">means</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">sems</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">iteration_objectives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">iteration_constraints</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">z</span> <span class="o">&gt;</span> <span class="mf">1.25</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>  <span class="c1"># The value of infeasible points</span>
+    <span class="n">best_obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="n">obj_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj_i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">means</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_obj</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sems</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_obj</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">best_obj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="s1">'GP, online only'</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'firebrick'</span><span class="p">,</span> <span class="s1">'steelblue'</span><span class="p">]</span>
+<span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'GP, online only'</span><span class="p">,</span> <span class="s1">'MTGP, Algorithm 1'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">methods</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'-'</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sems</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">means</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sems</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=-</span><span class="mf">3.32237</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">)</span>  <span class="c1"># Actual optimum for this problem</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Online iteration'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Best-feasible objective value'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Bayesian optimization performance'</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea">
+<img src="data:image/png;base64,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
+"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="References">References<a class="anchor-link" href="#References">¶</a></h4><p>Benjamin Letham and Eytan Bakshy. Bayesian optimization for policy search via online-offline experimentation. <em>arXiv preprint arXiv:1603.09326</em>, 2019.</p>
+<p>Kevin Swersky, Jasper Snoek, and Ryan P Adams.  Multi-task Bayesian optimization.  In <em>Advances in Neural Information Processing Systems</em> 26, NIPS, pages 2004–2012, 2013.</p>
+</div>
+</div>
+</div>
+</div></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/files/multi_task.ipynb" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Jupyter Notebook</a></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/files//multi_task.py" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Source Code</a></div></div></div></div><footer class="nav-footer" id="footer"><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Facebook Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '467d4f1f6cace3ecb36ab551cb44905b',
+                indexName: 'ax',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {}
+              });
+            </script></body></html>
