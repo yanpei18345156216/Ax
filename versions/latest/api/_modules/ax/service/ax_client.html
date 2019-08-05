@@ -502,8 +502,7 @@ src="/js/documentation_options.js">
         <span class="n">experiment</span> <span class="o">=</span> <span class="n">object_from_json</span><span class="p">(</span><span class="n">serialized</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"experiment"</span><span class="p">))</span>
         <span class="n">ax_client</span> <span class="o">=</span> <span class="n">AxClient</span><span class="p">(</span>
             <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy_from_json</span><span class="p">(</span>
-                <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span>
-                <span class="n">generation_strategy_json</span><span class="o">=</span><span class="n">serialized</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"generation_strategy"</span><span class="p">),</span>
+                <span class="n">generation_strategy_json</span><span class="o">=</span><span class="n">serialized</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"generation_strategy"</span><span class="p">)</span>
             <span class="p">),</span>
             <span class="n">enforce_sequential_optimization</span><span class="o">=</span><span class="n">serialized</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
                 <span class="s2">"_enforce_sequential_optimization"</span>

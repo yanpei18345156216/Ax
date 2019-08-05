@@ -288,11 +288,12 @@ src="/js/documentation_options.js">
 
 
 <div class="viewcode-block" id="generation_strategy_from_json"><a class="viewcode-back" href="../../../../storage.html#ax.storage.json_store.decoder.generation_strategy_from_json">[docs]</a><span class="k">def</span> <span class="nf">generation_strategy_from_json</span><span class="p">(</span>
-    <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">generation_strategy_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">generation_strategy_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
     <span class="sd">"""Load generation strategy from JSON."""</span>
     <span class="n">steps</span> <span class="o">=</span> <span class="n">object_from_json</span><span class="p">(</span><span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"steps"</span><span class="p">))</span>
     <span class="n">gs</span> <span class="o">=</span> <span class="n">GenerationStrategy</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
+    <span class="n">gs</span><span class="o">.</span><span class="n">_experiment</span> <span class="o">=</span> <span class="n">object_from_json</span><span class="p">(</span><span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"experiment"</span><span class="p">))</span>
     <span class="n">gs</span><span class="o">.</span><span class="n">_generated</span> <span class="o">=</span> <span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"generated"</span><span class="p">)</span>
     <span class="n">gs</span><span class="o">.</span><span class="n">_observed</span> <span class="o">=</span> <span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"observed"</span><span class="p">)</span>
     <span class="n">gs</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">object_from_json</span><span class="p">(</span><span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"data"</span><span class="p">))</span>
@@ -301,7 +302,7 @@ src="/js/documentation_options.js">
         <span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"generator_runs"</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">generation_strategy_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"had_initialized_model"</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">gs</span><span class="o">.</span><span class="n">_restore_model_from_generator_run</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">)</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_restore_model_from_generator_run</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">gs</span></div>
 </pre></div>
 </div>

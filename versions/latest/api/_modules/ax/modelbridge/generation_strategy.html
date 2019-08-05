@@ -117,6 +117,9 @@ src="/js/documentation_options.js">
     <span class="c1"># All generator runs created through this generation strategy, in chronological</span>
     <span class="c1"># order.</span>
     <span class="n">_generator_runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GeneratorRun</span><span class="p">]</span>
+    <span class="c1"># Experiment, for which this generation strategy has generated trials, if</span>
+    <span class="c1"># it exists.</span>
+    <span class="n">_experiment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Experiment</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GenerationStep</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
@@ -142,6 +145,7 @@ src="/js/documentation_options.js">
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_curr</span> <span class="o">=</span> <span class="n">steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generator_runs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -197,6 +201,8 @@ src="/js/documentation_options.js">
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratorRun</span><span class="p">:</span>
         <span class="sd">"""Produce the next points in the experiment."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">)</span>
+
         <span class="c1"># Get arm signatures for each entry in new_data that is indeed new.</span>
         <span class="n">new_arms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_new_arm_signatures</span><span class="p">(</span>
             <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="n">new_data</span><span class="o">=</span><span class="n">new_data</span>
@@ -347,12 +353,14 @@ src="/js/documentation_options.js">
             <span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_restore_model_from_generator_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_restore_model_from_generator_run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">generator_run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_generator_run</span>
         <span class="k">if</span> <span class="n">generator_run</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No generator run was stored on generation strategy."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No experiment was set on this generation strategy."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">get_model_from_generator_run</span><span class="p">(</span>
-            <span class="n">generator_run</span><span class="o">=</span><span class="n">generator_run</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+            <span class="n">generator_run</span><span class="o">=</span><span class="n">generator_run</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_change_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -398,7 +406,25 @@ src="/js/documentation_options.js">
                         <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `signature`.</span>
                         <span class="n">experiment</span><span class="o">.</span><span class="n">arms_by_name</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"arm_name"</span><span class="p">])</span><span class="o">.</span><span class="n">signature</span>
                     <span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_signatures</span></div>
+        <span class="k">return</span> <span class="n">new_signatures</span>
+
+    <span class="k">def</span> <span class="nf">_set_experiment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""If there is an experiment set on this generation strategy as the</span>
+<span class="sd">        experiment it has been generating generator runs for, check if the</span>
+<span class="sd">        experiment passed in is the same as the one saved and log an information</span>
+<span class="sd">        statement if its not. Set the new experiment on this generation strategy.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">experiment</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">_name</span>
+        <span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">"This generation strategy has been used for experiment "</span>
+                <span class="n">f</span><span class="s2">"</span><span class="si">{self._experiment._name}</span><span class="s2"> so far; generating trials for "</span>
+                <span class="n">f</span><span class="s2">"</span><span class="si">{experiment._name}</span><span class="s2"> from now on. If this is a new optimization, "</span>
+                <span class="s2">"a new generation strategy should be created instead."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="o">=</span> <span class="n">experiment</span></div>
 </pre></div>
 </div>
 </div>
