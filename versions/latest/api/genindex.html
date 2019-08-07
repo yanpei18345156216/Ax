@@ -753,6 +753,8 @@ src="/js/documentation_options.js">
 </ul></li>
 <li><a href="modelbridge.html#ax.modelbridge.cross_validation.cross_validate_by_trial">cross_validate_by_trial() (in module ax.modelbridge.cross_validation)</a>
 </li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.curr_index">curr_index (ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+</li>
 <li><a href="core.html#ax.core.data.custom_data_class">custom_data_class() (in module ax.core.data)</a>
 </li>
 <li><a href="modelbridge.html#ax.modelbridge.cross_validation.CVResult">CVResult (class in ax.modelbridge.cross_validation)</a>
@@ -927,6 +929,8 @@ src="/js/documentation_options.js">
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAData.experiment_id">experiment_id (ax.storage.sqa_store.sqa_classes.SQAData attribute)</a>
 <ul>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.experiment_id">(ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAMetric.experiment_id">(ax.storage.sqa_store.sqa_classes.SQAMetric attribute)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAParameter.experiment_id">(ax.storage.sqa_store.sqa_classes.SQAParameter attribute)</a>
@@ -1113,9 +1117,19 @@ src="/js/documentation_options.js">
 </li>
 <li><a href="benchmark.html#ax.benchmark.benchmark_suite.BOBenchmarkingSuite.generate_report">generate_report() (ax.benchmark.benchmark_suite.BOBenchmarkingSuite method)</a>
 </li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.generated">generated (ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment.generation_strategy">generation_strategy (ax.storage.sqa_store.sqa_classes.SQAExperiment attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.json_store.decoder.generation_strategy_from_json">generation_strategy_from_json() (in module ax.storage.json_store.decoder)</a>
 </li>
+<li><a href="storage.html#ax.storage.sqa_store.decoder.Decoder.generation_strategy_from_sqa">generation_strategy_from_sqa() (ax.storage.sqa_store.decoder.Decoder method)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGeneratorRun.generation_strategy_id">generation_strategy_id (ax.storage.sqa_store.sqa_classes.SQAGeneratorRun attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.json_store.encoders.generation_strategy_to_dict">generation_strategy_to_dict() (in module ax.storage.json_store.encoders)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.encoder.Encoder.generation_strategy_to_sqa">generation_strategy_to_sqa() (ax.storage.sqa_store.encoder.Encoder method)</a>
 </li>
 <li><a href="modelbridge.html#ax.modelbridge.generation_strategy.GenerationStep">GenerationStep (class in ax.modelbridge.generation_strategy)</a>
 </li>
@@ -1164,15 +1178,18 @@ src="/js/documentation_options.js">
 <li><a href="ax.html#ax.GeneratorRun.generator_run_type">(ax.GeneratorRun property)</a>
 </li>
 </ul></li>
-<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQATrial.generator_runs">generator_runs (ax.storage.sqa_store.sqa_classes.SQATrial attribute)</a>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.generator_runs">generator_runs (ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+<ul>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQATrial.generator_runs">(ax.storage.sqa_store.sqa_classes.SQATrial attribute)</a>
 </li>
+</ul></li>
+</ul></td>
+<td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="ax.html#ax.GeneratorRun">GeneratorRun (class in ax)</a>
 <ul>
 <li><a href="core.html#ax.core.generator_run.GeneratorRun">(class in ax.core.generator_run)</a>
 </li>
 </ul></li>
-</ul></td>
-<td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="core.html#ax.core.batch_trial.GeneratorRunStruct">GeneratorRunStruct (class in ax.core.batch_trial)</a>
 </li>
 <li><a href="core.html#ax.core.generator_run.GeneratorRunType">GeneratorRunType (class in ax.core.generator_run)</a>
@@ -1297,6 +1314,8 @@ src="/js/documentation_options.js">
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment.id">(ax.storage.sqa_store.sqa_classes.SQAExperiment attribute)</a>
 </li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.id">(ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGeneratorRun.id">(ax.storage.sqa_store.sqa_classes.SQAGeneratorRun attribute)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAMetric.id">(ax.storage.sqa_store.sqa_classes.SQAMetric attribute)</a>
@@ -1374,10 +1393,10 @@ src="/js/documentation_options.js">
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.db.init_test_engine_and_session_factory">init_test_engine_and_session_factory() (in module ax.storage.sqa_store.db)</a>
 </li>
-<li><a href="core.html#ax.core.parameter.ParameterType.INT">INT (ax.core.parameter.ParameterType attribute)</a>
-</li>
 </ul></td>
 <td style="width: 33%; vertical-align: top;"><ul>
+<li><a href="core.html#ax.core.parameter.ParameterType.INT">INT (ax.core.parameter.ParameterType attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAMetric.intent">intent (ax.storage.sqa_store.sqa_classes.SQAMetric attribute)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_enum.IntEnum">IntEnum (class in ax.storage.sqa_store.sqa_enum)</a>
@@ -1715,6 +1734,8 @@ src="/js/documentation_options.js">
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment.name">(ax.storage.sqa_store.sqa_classes.SQAExperiment attribute)</a>
 </li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.name">(ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
+</li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAMetric.name">(ax.storage.sqa_store.sqa_classes.SQAMetric attribute)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAParameter.name">(ax.storage.sqa_store.sqa_classes.SQAParameter attribute)</a>
@@ -1840,6 +1861,8 @@ src="/js/documentation_options.js">
 <li><a href="core.html#ax.core.observation.ObservationFeatures">ObservationFeatures (class in ax.core.observation)</a>
 </li>
 <li><a href="core.html#ax.core.observation.observations_from_data">observations_from_data() (in module ax.core.observation)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.observed">observed (ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
 </li>
 <li><a href="modelbridge.html#ax.modelbridge.cross_validation.CVResult.observed">observed() (ax.modelbridge.cross_validation.CVResult property)</a>
 </li>
@@ -2268,6 +2291,8 @@ src="/js/documentation_options.js">
 <li><a href="storage.html#ax.storage.sqa_store.save.save_experiment">(in module ax.storage.sqa_store.save)</a>
 </li>
 </ul></li>
+<li><a href="storage.html#ax.storage.sqa_store.save.save_generation_strategy">save_generation_strategy() (in module ax.storage.sqa_store.save)</a>
+</li>
 <li><a href="core.html#ax.core.objective.ScalarizedObjective">ScalarizedObjective (class in ax.core.objective)</a>
 </li>
 <li><a href="models.html#ax.models.random.base.RandomModel.scramble">scramble (ax.models.random.base.RandomModel attribute)</a>
@@ -2358,10 +2383,10 @@ src="/js/documentation_options.js">
 </ul></li>
 <li><a href="plot.html#ax.plot.base.AxPlotTypes.SLICE">SLICE (ax.plot.base.AxPlotTypes attribute)</a>
 </li>
-</ul></td>
-<td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="models.html#ax.models.random.sobol.SobolGenerator">SobolGenerator (class in ax.models.random.sobol)</a>
 </li>
+</ul></td>
+<td style="width: 33%; vertical-align: top;"><ul>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAAbandonedArm">SQAAbandonedArm (class in ax.storage.sqa_store.sqa_classes)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAArm">SQAArm (class in ax.storage.sqa_store.sqa_classes)</a>
@@ -2375,6 +2400,8 @@ src="/js/documentation_options.js">
 <li><a href="exceptions.html#ax.exceptions.storage.SQAEncodeError">SQAEncodeError</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment">SQAExperiment (class in ax.storage.sqa_store.sqa_classes)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy">SQAGenerationStrategy (class in ax.storage.sqa_store.sqa_classes)</a>
 </li>
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGeneratorRun">SQAGeneratorRun (class in ax.storage.sqa_store.sqa_classes)</a>
 </li>
@@ -2426,6 +2453,8 @@ src="/js/documentation_options.js">
 <li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment.status_quo_parameters">status_quo_parameters (ax.storage.sqa_store.sqa_classes.SQAExperiment attribute)</a>
 </li>
 <li><a href="plot.html#ax.plot.color.COLORS.STEELBLUE">STEELBLUE (ax.plot.color.COLORS attribute)</a>
+</li>
+<li><a href="storage.html#ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy.steps">steps (ax.storage.sqa_store.sqa_classes.SQAGenerationStrategy attribute)</a>
 </li>
 <li><a href="core.html#ax.core.runner.Runner.stop">stop() (ax.core.runner.Runner method)</a>
 <ul>

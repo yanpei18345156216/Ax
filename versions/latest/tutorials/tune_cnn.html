@@ -112,84 +112,25 @@ function require(deps, fxn) {
 <div class="output">
 <div class="output_area">
 <div class="prompt"></div>
-<div class="output_html rendered_html output_subarea">
-<script type="text/javascript">/*
- * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
- */
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-01f17f24888a&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-green-fg">from</span> ax<span class="ansi-blue-fg">.</span>service<span class="ansi-blue-fg">.</span>managed_loop <span class="ansi-green-fg">import</span> optimize
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">from</span> ax<span class="ansi-blue-fg">.</span>utils<span class="ansi-blue-fg">.</span>notebook<span class="ansi-blue-fg">.</span>plotting <span class="ansi-green-fg">import</span> render<span class="ansi-blue-fg">,</span> init_notebook_plotting
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> ax<span class="ansi-blue-fg">.</span>utils<span class="ansi-blue-fg">.</span>tutorials<span class="ansi-blue-fg">.</span>cnn_utils <span class="ansi-green-fg">import</span> load_mnist<span class="ansi-blue-fg">,</span> train<span class="ansi-blue-fg">,</span> evaluate<span class="ansi-blue-fg">,</span> CNN
+<span class="ansi-green-intense-fg ansi-bold">      9</span> 
+<span class="ansi-green-intense-fg ansi-bold">     10</span> init_notebook_plotting<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-requirejs.config({
-  paths: {
-    plotly: ['https://cdn.plot.ly/plotly-latest.min'],
-  },
-});
-if (!window.Plotly) {
-  require(['plotly'], function(plotly) {
-    window.Plotly = plotly;
-  });
-}
-/*
- * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
- */
+<span class="ansi-green-fg">~/build/facebook/Ax/ax/utils/tutorials/cnn_utils.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> <span class="ansi-green-fg">import</span> torch<span class="ansi-blue-fg">.</span>nn<span class="ansi-blue-fg">.</span>functional <span class="ansi-green-fg">as</span> F
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">import</span> torch<span class="ansi-blue-fg">.</span>optim <span class="ansi-green-fg">as</span> optim
+<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> torchvision
+<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">import</span> torchvision<span class="ansi-blue-fg">.</span>transforms <span class="ansi-green-fg">as</span> transforms
+<span class="ansi-green-intense-fg ansi-bold">     13</span> <span class="ansi-green-fg">from</span> torch<span class="ansi-blue-fg">.</span>utils<span class="ansi-blue-fg">.</span>data <span class="ansi-green-fg">import</span> DataLoader<span class="ansi-blue-fg">,</span> Dataset<span class="ansi-blue-fg">,</span> Subset
 
-// helper functions used across multiple plots
-function rgb(rgb_array) {
-  return 'rgb(' + rgb_array.join() + ')';
-}
-
-function copy_and_reverse(arr) {
-  const copy = arr.slice();
-  copy.reverse();
-  return copy;
-}
-
-function axis_range(grid, is_log) {
-  return is_log ?
-    [Math.log10(Math.min(...grid)), Math.log10(Math.max(...grid))]:
-    [Math.min(...grid), Math.max(...grid)];
-}
-
-function relativize_data(f, sd, rel, arm_data, metric) {
-  // if relative, extract status quo & compute ratio
-  const f_final = rel === true ? [] : f;
-  const sd_final = rel === true ? []: sd;
-
-  if (rel === true) {
-    const f_sq = (
-      arm_data['in_sample'][arm_data['status_quo_name']]['y'][metric]
-    );
-    const sd_sq = (
-      arm_data['in_sample'][arm_data['status_quo_name']]['se'][metric]
-    );
-
-    for (let i = 0; i < f.length; i++) {
-      res = relativize(f[i], sd[i], f_sq, sd_sq);
-      f_final.push(100 * res[0]);
-      sd_final.push(100 * res[1]);
-    }
-  }
-
-  return [f_final, sd_final];
-}
-
-function relativize(m_t, sem_t, m_c, sem_c) {
-  r_hat = (
-    (m_t - m_c) / Math.abs(m_c) -
-    Math.pow(sem_c, 2) * m_t / Math.pow(Math.abs(m_c), 3)
-  );
-  variance = (
-    (Math.pow(sem_t, 2) + Math.pow((m_t / m_c * sem_c), 2)) /
-    Math.pow(m_c, 2)
-   )
-   return [r_hat, Math.sqrt(variance)];
-}
-</script>
-</div>
-</div>
-<div class="output_area">
-<div class="prompt"></div>
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>[INFO 07-23 09:16:46] ipy_plotting: Injecting Plotly library into cell. Do not overwrite or delete cell.
-</pre>
+<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named 'torchvision'</pre>
 </div>
 </div>
 </div>

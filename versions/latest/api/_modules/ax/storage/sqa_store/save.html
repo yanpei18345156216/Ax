@@ -32,6 +32,7 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">ax.core.experiment</span> <span class="k">import</span> <span class="n">Experiment</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.db</span> <span class="k">import</span> <span class="n">session_scope</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.encoder</span> <span class="k">import</span> <span class="n">Encoder</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_config</span> <span class="k">import</span> <span class="n">SQAConfig</span>
@@ -78,6 +79,57 @@ src="/js/documentation_options.js">
 
     <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
         <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_sqa_experiment</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="save_generation_strategy"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.save.save_generation_strategy">[docs]</a><span class="k">def</span> <span class="nf">save_generation_strategy</span><span class="p">(</span>
+    <span class="n">generation_strategy</span><span class="p">:</span> <span class="n">GenerationStrategy</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SQAConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">"""Save generation strategy (using default SQAConfig if no config is</span>
+<span class="sd">    specified). If the generation strategy has an experiment set, the experiment</span>
+<span class="sd">    will be saved first.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The ID of the saved generation strategy.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># Start up SQA encoder.</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SQAConfig</span><span class="p">()</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># If the generation strategy has not yet generated anything, there will be no</span>
+    <span class="c1"># experiment set on it.</span>
+    <span class="k">if</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">generation_strategy_to_sqa</span><span class="p">(</span>
+                <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gs_sqa</span><span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Ensures generation strategy id is set.</span>
+            <span class="k">return</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="c1"># Experiment was set on the generation strategy, so we need to save it first.</span>
+    <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">exp_sqa_class</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">class_to_sqa_class</span><span class="p">[</span><span class="n">Experiment</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">sqa_experiment</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">exp_sqa_class</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">sqa_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover (this is technically unreachable)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"The undelying experiment must be saved before the generation strategy."</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Having saved the experiment, we can save the generation strategy with the</span>
+    <span class="c1"># experiment ID attached to it.</span>
+    <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">generation_strategy_to_sqa</span><span class="p">(</span>
+            <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="n">sqa_experiment</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gs_sqa</span><span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Ensures generation strategy id is set.</span>
+        <span class="k">return</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span></div>
 </pre></div>
 </div>
 </div>

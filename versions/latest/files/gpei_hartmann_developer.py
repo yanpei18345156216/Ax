@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Developer API Example on Hartmann6
+# 
+# The Developer API is suitable when the user wants maximal customization of the optimization loop. This tutorial demonstrates optimization of a Hartmann6 function using the `SimpleExperiment` construct, which we use for synchronous experiments, where trials can be evaluated right away.
+# 
+# For more details on the different Ax constructs, see the "Building Blocks of Ax" tutorial.
+
+# In[1]:
+
 
 import numpy as np
 from ax import (
@@ -17,6 +28,14 @@ from ax.utils.notebook.plotting import render, init_notebook_plotting
 
 init_notebook_plotting()
 
+
+# ## 1. Define evaluation function
+# 
+# First, we define an evaluation function that is able to compute all the metrics needed for this experiment. This function needs to accept a set of parameter values and can also accept a weight. It should produce a dictionary of metric names to tuples of mean and standard error for those metrics. Note that when using `Experiment` (instead of `SimpleExperiment`), it's possible to deploy trials and fetch their evaluation results asynchronously; more on that in the "Building Blocks of Ax" tutorial.
+
+# In[2]:
+
+
 def hartmann_evaluation_function(
     parameterization, # Mapping of parameter names to values of those parameters.
     weight=None, # Optional weight argument.
@@ -24,6 +43,16 @@ def hartmann_evaluation_function(
     x = np.array([parameterization.get(f"x{i}") for i in range(6)])
     # In our case, standard error is 0, since we are computing a synthetic function.
     return {"hartmann6": (hartmann6(x), 0.0), "l2norm": (np.sqrt((x ** 2).sum()), 0.0)}
+
+
+# If there is only one metric in the experiment – the objective – then evaluation function can return a single tuple of mean and SEM, in which case Ax will assume that evaluation corresponds to the objective. It can also return only the mean as a float, in which case Ax will assume that SEM is 0.0. For more details on evaluation function, refer to the "Trial Evaluation" section in the docs.
+
+# ## 2. Create Search Space
+# 
+# Second, we define a search space, which defines the type and allowed range for the parameters.
+
+# In[3]:
+
 
 hartmann_search_space = SearchSpace(
     parameters=[
@@ -33,6 +62,16 @@ hartmann_search_space = SearchSpace(
         for i in range(6)
     ]
 )
+
+
+# ## 3. Create Experiment
+# 
+# Third, we make a `SimpleExperiment`. In addition to the search space and evaluation function, here we define the `objective_name` and `outcome_constraints`.
+# 
+# When doing the optimization, we will find points that minimize the objective while obeying the constraints (which in this case means `l2norm < 1.25`).
+
+# In[4]:
+
 
 exp = SimpleExperiment(
     name="test_branin",
@@ -52,6 +91,14 @@ exp = SimpleExperiment(
     ],
 )
 
+
+# ## 4. Perform Optimization
+# 
+# Run the optimization using the settings defined on the experiment. We will create 5 random sobol points for exploration followed by 15 points generated using the GPEI optimizer.
+
+# In[5]:
+
+
 print(f"Running Sobol initialization trials...")
 sobol = Models.SOBOL(exp.search_space)
 for i in range(5):
@@ -65,8 +112,25 @@ for i in range(25):
     
 print("Done!")
 
+
+# ## 5. Inspect trials' data
+# 
+# Now we can inspect the `SimpleExperiment`'s data by calling `eval()`, which retrieves evaluation data for all batches of the experiment.
+# 
+# We can also use the `eval_trial` function to get evaluation data for a specific trial in the experiment, like so:
+
+# In[6]:
+
+
 trial_data = exp.eval_trial(exp.trials[1])
 trial_data.df
+
+
+# ## 6. Plot results
+# Now we can plot the results of our optimization:
+
+# In[7]:
+
 
 # `plot_single_method` expects a 2-d array of means, because it expects to average means from multiple 
 # optimization runs, so we wrap out best objectives array in another array.
@@ -76,3 +140,4 @@ best_objective_plot = optimization_trace_single_method(
         optimum=-3.32237,  # Known minimum objective for Hartmann6 function.
 )
 render(best_objective_plot)
+

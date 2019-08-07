@@ -267,11 +267,11 @@ function require(deps, fxn) {
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Arm(parameters={'x1': 3.2536345720291138, 'x2': 9.878522753715515})
-Arm(parameters={'x1': 0.34163210541009903, 'x2': 3.725365698337555})
-Arm(parameters={'x1': 5.165935754776001, 'x2': 7.128967642784119})
-Arm(parameters={'x1': 6.856637597084045, 'x2': 4.637634754180908})
-Arm(parameters={'x1': 1.3681383430957794, 'x2': 6.226785182952881})
+<pre>Arm(parameters={'x1': 3.0975624918937683, 'x2': 5.386694073677063})
+Arm(parameters={'x1': 0.24330278858542442, 'x2': 1.8366795778274536})
+Arm(parameters={'x1': 6.872081160545349, 'x2': 8.164477944374084})
+Arm(parameters={'x1': 5.933638215065002, 'x2': 0.9353449940681458})
+Arm(parameters={'x1': 2.429340034723282, 'x2': 9.139330983161926})
 </pre>
 </div>
 </div>
@@ -508,11 +508,11 @@ Arm(parameters={'x1': 1.3681383430957794, 'x2': 6.226785182952881})
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Arm(name='0_0', parameters={'x1': 3.2536345720291138, 'x2': 9.878522753715515})
-Arm(name='0_1', parameters={'x1': 0.34163210541009903, 'x2': 3.725365698337555})
-Arm(name='0_2', parameters={'x1': 5.165935754776001, 'x2': 7.128967642784119})
-Arm(name='0_3', parameters={'x1': 6.856637597084045, 'x2': 4.637634754180908})
-Arm(name='0_4', parameters={'x1': 1.3681383430957794, 'x2': 6.226785182952881})
+<pre>Arm(name='0_0', parameters={'x1': 3.0975624918937683, 'x2': 5.386694073677063})
+Arm(name='0_1', parameters={'x1': 0.24330278858542442, 'x2': 1.8366795778274536})
+Arm(name='0_2', parameters={'x1': 6.872081160545349, 'x2': 8.164477944374084})
+Arm(name='0_3', parameters={'x1': 5.933638215065002, 'x2': 0.9353449940681458})
+Arm(name='0_4', parameters={'x1': 2.429340034723282, 'x2': 9.139330983161926})
 Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 </pre>
 </div>
@@ -542,7 +542,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <div class="output_area">
 <div class="prompt output_prompt">Out[15]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre>Trial(experiment_name='experiment_building_blocks', index=1, status=TrialStatus.CANDIDATE)</pre>
+<pre>Trial(experiment_name='experiment_building_blocks', index=1, status=TrialStatus.CANDIDATE, arm=Arm(name='single_arm', parameters={'x1': 1, 'x2': 1}))</pre>
 </div>
 </div>
 </div>
@@ -661,7 +661,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>0</th>
 <td>0_0</td>
 <td>booth</td>
-<td>385.978134</td>
+<td>90.530305</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -669,7 +669,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>1</th>
 <td>0_1</td>
 <td>booth</td>
-<td>0.977559</td>
+<td>16.671776</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -677,7 +677,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>2</th>
 <td>0_2</td>
 <td>booth</td>
-<td>309.625084</td>
+<td>548.375717</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -685,7 +685,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>3</th>
 <td>0_3</td>
 <td>booth</td>
-<td>261.638524</td>
+<td>61.527845</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -693,7 +693,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>4</th>
 <td>0_4</td>
 <td>booth</td>
-<td>62.241569</td>
+<td>268.873522</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -744,10 +744,8 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/data/users/drfreund/fbsource/fbcode/buck-out/dev/gen/bento/kernels/bento_kernel_ae#link-tree/gpytorch/utils/cholesky.py:42: RuntimeWarning:
-
-A not p.d., added jitter of 1e-08 to the diagonal
-
+<pre>/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/gpytorch/utils/cholesky.py:42: RuntimeWarning: A not p.d., added jitter of 1e-08 to the diagonal
+  warnings.warn(f"A not p.d., added jitter of {jitter_new} to the diagonal", RuntimeWarning)
 </pre>
 </div>
 </div>
@@ -776,11 +774,11 @@ A not p.d., added jitter of 1e-08 to the diagonal
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Arm(name='2_0', parameters={'x1': 1.93457792812474, 'x2': 2.71875083084198})
-Arm(name='2_1', parameters={'x1': 0.0, 'x2': 5.231730650062736})
-Arm(name='2_2', parameters={'x1': 3.470924216188001, 'x2': 1.6248414523496096e-16})
-Arm(name='2_3', parameters={'x1': 9.999999999999998, 'x2': 1.0166622583795502e-14})
-Arm(name='2_4', parameters={'x1': 3.99761633552033e-12, 'x2': 2.6898579284932627})
+<pre>Arm(name='2_0', parameters={'x1': 2.6629054647526496, 'x2': 1.8491570761381908})
+Arm(name='2_1', parameters={'x1': 3.67913742372154e-15, 'x2': 4.800217111846994})
+Arm(name='2_2', parameters={'x1': 9.999999999986555, 'x2': 8.551283127654874e-11})
+Arm(name='2_3', parameters={'x1': 3.405070473292489, 'x2': 1.3134327998521414e-15})
+Arm(name='2_4', parameters={'x1': 1.7782038767548867, 'x2': 3.2247957793976627})
 Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 </pre>
 </div>
@@ -835,7 +833,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>0</th>
 <td>0_0</td>
 <td>booth</td>
-<td>385.978134</td>
+<td>90.530305</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -843,7 +841,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>1</th>
 <td>0_1</td>
 <td>booth</td>
-<td>0.977559</td>
+<td>16.671776</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -851,7 +849,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>2</th>
 <td>0_2</td>
 <td>booth</td>
-<td>309.625084</td>
+<td>548.375717</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -859,7 +857,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>3</th>
 <td>0_3</td>
 <td>booth</td>
-<td>261.638524</td>
+<td>61.527845</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -867,7 +865,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>4</th>
 <td>0_4</td>
 <td>booth</td>
-<td>62.241569</td>
+<td>268.873522</td>
 <td>0.0</td>
 <td>0</td>
 </tr>
@@ -883,7 +881,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>6</th>
 <td>2_0</td>
 <td>booth</td>
-<td>2.659891</td>
+<td>5.138526</td>
 <td>0.0</td>
 <td>2</td>
 </tr>
@@ -891,7 +889,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>7</th>
 <td>2_1</td>
 <td>booth</td>
-<td>12.049263</td>
+<td>6.802171</td>
 <td>0.0</td>
 <td>2</td>
 </tr>
@@ -899,7 +897,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>8</th>
 <td>2_2</td>
 <td>booth</td>
-<td>16.225151</td>
+<td>234.000000</td>
 <td>0.0</td>
 <td>2</td>
 </tr>
@@ -907,7 +905,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>9</th>
 <td>2_3</td>
 <td>booth</td>
-<td>234.000000</td>
+<td>16.200129</td>
 <td>0.0</td>
 <td>2</td>
 </tr>
@@ -915,7 +913,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <th>10</th>
 <td>2_4</td>
 <td>booth</td>
-<td>7.962077</td>
+<td>4.680168</td>
 <td>0.0</td>
 <td>2</td>
 </tr>
@@ -1097,7 +1095,7 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 <div class="output_area">
 <div class="prompt output_prompt">Out[30]:</div>
 <div class="output_text output_subarea output_execute_result">
-<pre>Trial(experiment_name='None', index=0, status=TrialStatus.CANDIDATE)</pre>
+<pre>Trial(experiment_name='None', index=0, status=TrialStatus.CANDIDATE, arm=Arm(name='single_arm', parameters={'x1': 1, 'x2': 1}))</pre>
 </div>
 </div>
 </div>
@@ -1171,4 +1169,4 @@ Arm(name='control', parameters={'x1': 0.0, 'x2': 0.0})
 </div>
 </div>
 </div>
-</div></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/versions/latest/files/building_blocks.ipynb" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Jupyter Notebook</a></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/versions/latest/files//building_blocks.py" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Source Code</a></div></div></div></div><footer class="nav-footer" id="footer"><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/versions/latest/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Facebook Inc.</section></footer></div></body></html>
+</div></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/versions/latest/files/building_blocks.ipynb" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Jupyter Notebook</a></div><div class="tutorialButtonWrapper buttonWrapper"><a class="tutorialButton button" download="" href="/versions/latest/files//building_blocks.py" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-download" class="svg-inline--fa fa-file-download fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"></path></svg>Download Tutorial Source Code</a></div><div class="tutorialRuntime"><p>Total runtime of script: 12.66 seconds.</p></div></div></div></div><footer class="nav-footer" id="footer"><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/versions/latest/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Facebook Inc.</section></footer></div></body></html>

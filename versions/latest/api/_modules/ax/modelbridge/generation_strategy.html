@@ -33,6 +33,7 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">ax.core.base</span> <span class="k">import</span> <span class="n">Base</span>
 <span class="kn">from</span> <span class="nn">ax.core.data</span> <span class="k">import</span> <span class="n">Data</span>
 <span class="kn">from</span> <span class="nn">ax.core.experiment</span> <span class="k">import</span> <span class="n">Experiment</span>
 <span class="kn">from</span> <span class="nn">ax.core.generator_run</span> <span class="k">import</span> <span class="n">GeneratorRun</span>
@@ -95,7 +96,7 @@ src="/js/documentation_options.js">
     <span class="n">index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Index of this step, set internally.</span></div>
 
 
-<div class="viewcode-block" id="GenerationStrategy"><a class="viewcode-back" href="../../../modelbridge.html#ax.modelbridge.generation_strategy.GenerationStrategy">[docs]</a><span class="k">class</span> <span class="nc">GenerationStrategy</span><span class="p">:</span>
+<div class="viewcode-block" id="GenerationStrategy"><a class="viewcode-back" href="../../../modelbridge.html#ax.modelbridge.generation_strategy.GenerationStrategy">[docs]</a><span class="k">class</span> <span class="nc">GenerationStrategy</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
     <span class="sd">"""GenerationStrategy describes which model should be used to generate new</span>
 <span class="sd">    points for which trials, enabling and automating use of different models</span>
 <span class="sd">    throughout the optimization process. For instance, it allows to use one</span>

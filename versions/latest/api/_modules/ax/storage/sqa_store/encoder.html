@@ -30,9 +30,10 @@ src="/js/documentation_options.js">
 <span class="c1"># Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.</span>
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span> <span class="nn">ax.core.arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="kn">from</span> <span class="nn">ax.core.base</span> <span class="k">import</span> <span class="n">Base</span>
 <span class="kn">from</span> <span class="nn">ax.core.base_trial</span> <span class="k">import</span> <span class="n">BaseTrial</span>
 <span class="kn">from</span> <span class="nn">ax.core.batch_trial</span> <span class="k">import</span> <span class="n">AbandonedArm</span><span class="p">,</span> <span class="n">BatchTrial</span>
 <span class="kn">from</span> <span class="nn">ax.core.data</span> <span class="k">import</span> <span class="n">Data</span>
@@ -54,6 +55,7 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">ax.core.simple_experiment</span> <span class="k">import</span> <span class="n">SimpleExperiment</span>
 <span class="kn">from</span> <span class="nn">ax.core.trial</span> <span class="k">import</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">ax.exceptions.storage</span> <span class="k">import</span> <span class="n">SQAEncodeError</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.json_store.encoder</span> <span class="k">import</span> <span class="n">object_to_json</span>
 <span class="kn">from</span> <span class="nn">ax.storage.metric_registry</span> <span class="k">import</span> <span class="n">METRIC_REGISTRY</span>
 <span class="kn">from</span> <span class="nn">ax.storage.runner_registry</span> <span class="k">import</span> <span class="n">RUNNER_REGISTRY</span>
@@ -62,6 +64,7 @@ src="/js/documentation_options.js">
     <span class="n">SQAArm</span><span class="p">,</span>
     <span class="n">SQAData</span><span class="p">,</span>
     <span class="n">SQAExperiment</span><span class="p">,</span>
+    <span class="n">SQAGenerationStrategy</span><span class="p">,</span>
     <span class="n">SQAGeneratorRun</span><span class="p">,</span>
     <span class="n">SQAMetric</span><span class="p">,</span>
     <span class="n">SQAParameter</span><span class="p">,</span>
@@ -460,6 +463,31 @@ src="/js/documentation_options.js">
             <span class="n">bridge_kwargs</span><span class="o">=</span><span class="n">object_to_json</span><span class="p">(</span><span class="n">generator_run</span><span class="o">.</span><span class="n">_bridge_kwargs</span><span class="p">),</span>
         <span class="p">)</span></div>
 
+<div class="viewcode-block" id="Encoder.generation_strategy_to_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.encoder.Encoder.generation_strategy_to_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">generation_strategy_to_sqa</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">generation_strategy</span><span class="p">:</span> <span class="n">GenerationStrategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SQAGenerationStrategy</span><span class="p">:</span>
+        <span class="sd">"""Convert an Ax `GenerationStrategy` to SQLAlchemy, preserving its state,</span>
+<span class="sd">        so that the restored generation strategy can be resumed from the point</span>
+<span class="sd">        at which it was interrupted and stored.</span>
+<span class="sd">        """</span>
+        <span class="c1"># pyre-ignore[9]: Expected Base, but redeclared to `SQAGenerationStrategy`.</span>
+        <span class="n">gs_class</span><span class="p">:</span> <span class="n">SQAGenerationStrategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">class_to_sqa_class</span><span class="p">[</span>
+            <span class="n">cast</span><span class="p">(</span><span class="n">Type</span><span class="p">[</span><span class="n">Base</span><span class="p">],</span> <span class="n">GenerationStrategy</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="c1"># pyre-fixme[29]: `SQAGenerationStrategy` is not a function.</span>
+        <span class="k">return</span> <span class="n">gs_class</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">object_to_json</span><span class="p">(</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_steps</span><span class="p">),</span>
+            <span class="n">generated</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_generated</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_observed</span><span class="p">,</span>
+            <span class="n">curr_index</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_curr</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">generator_runs</span><span class="o">=</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generator_run_to_sqa</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">gr</span> <span class="ow">in</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_generator_runs</span>
+            <span class="p">],</span>
+            <span class="n">experiment_id</span><span class="o">=</span><span class="n">experiment_id</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
 <div class="viewcode-block" id="Encoder.runner_to_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.encoder.Encoder.runner_to_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">runner_to_sqa</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Runner</span><span class="p">,</span> <span class="n">trial_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SQARunner</span><span class="p">:</span>
@@ -541,7 +569,9 @@ src="/js/documentation_options.js">
             <span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Encoder.data_to_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.encoder.Encoder.data_to_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">data_to_sqa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="n">trial_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SQAData</span><span class="p">:</span>
+<div class="viewcode-block" id="Encoder.data_to_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.encoder.Encoder.data_to_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">data_to_sqa</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="n">trial_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SQAData</span><span class="p">:</span>
         <span class="sd">"""Convert AE data to SQLAlchemy."""</span>
         <span class="c1"># pyre-fixme: Expected `Base` for 1st...ot `typing.Type[Data]`.</span>
         <span class="n">data_class</span><span class="p">:</span> <span class="n">SQAData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">class_to_sqa_class</span><span class="p">[</span><span class="n">Data</span><span class="p">]</span>

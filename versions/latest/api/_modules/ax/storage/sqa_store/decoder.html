@@ -58,6 +58,7 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">ax.core.simple_experiment</span> <span class="k">import</span> <span class="n">SimpleExperiment</span>
 <span class="kn">from</span> <span class="nn">ax.core.trial</span> <span class="k">import</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">ax.exceptions.storage</span> <span class="k">import</span> <span class="n">SQADecodeError</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.json_store.decoder</span> <span class="k">import</span> <span class="n">object_from_json</span>
 <span class="kn">from</span> <span class="nn">ax.storage.metric_registry</span> <span class="k">import</span> <span class="n">REVERSE_METRIC_REGISTRY</span>
 <span class="kn">from</span> <span class="nn">ax.storage.runner_registry</span> <span class="k">import</span> <span class="n">REVERSE_RUNNER_REGISTRY</span>
@@ -67,6 +68,7 @@ src="/js/documentation_options.js">
     <span class="n">SQAArm</span><span class="p">,</span>
     <span class="n">SQAData</span><span class="p">,</span>
     <span class="n">SQAExperiment</span><span class="p">,</span>
+    <span class="n">SQAGenerationStrategy</span><span class="p">,</span>
     <span class="n">SQAGeneratorRun</span><span class="p">,</span>
     <span class="n">SQAMetric</span><span class="p">,</span>
     <span class="n">SQAParameter</span><span class="p">,</span>
@@ -557,6 +559,25 @@ src="/js/documentation_options.js">
         <span class="p">)</span>
         <span class="n">generator_run</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">index</span>
         <span class="k">return</span> <span class="n">generator_run</span></div>
+
+<div class="viewcode-block" id="Decoder.generation_strategy_from_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.decoder.Decoder.generation_strategy_from_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">generation_strategy_from_sqa</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">gs_sqa</span><span class="p">:</span> <span class="n">SQAGenerationStrategy</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
+        <span class="sd">"""Convert SQALchemy generation strategy to Ax `GenerationStrategy`."""</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">object_from_json</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">GenerationStrategy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_generated</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">generated</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_observed</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">observed</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_curr</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">_steps</span><span class="p">[</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">curr_index</span><span class="p">]</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_generator_runs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generator_run_from_sqa</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span> <span class="k">for</span> <span class="n">gr</span> <span class="ow">in</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">generator_runs</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">_generator_runs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Generation strategy had an initialized model.</span>
+            <span class="c1"># pyre-ignore[16]: SQAGenerationStrategy does not have `experiment` attr.</span>
+            <span class="n">gs</span><span class="o">.</span><span class="n">_experiment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_from_sqa</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">experiment</span><span class="p">)</span>
+            <span class="n">gs</span><span class="o">.</span><span class="n">_restore_model_from_generator_run</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">gs</span></div>
 
 <div class="viewcode-block" id="Decoder.runner_from_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.decoder.Decoder.runner_from_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">runner_from_sqa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner_sqa</span><span class="p">:</span> <span class="n">SQARunner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Runner</span><span class="p">:</span>
         <span class="sd">"""Convert SQLAlchemy Runner to Ax Runner."""</span>
