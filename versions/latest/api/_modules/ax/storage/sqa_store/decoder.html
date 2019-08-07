@@ -569,6 +569,8 @@ src="/js/documentation_options.js">
         <span class="n">gs</span><span class="o">.</span><span class="n">_generated</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">generated</span>
         <span class="n">gs</span><span class="o">.</span><span class="n">_observed</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">observed</span>
         <span class="n">gs</span><span class="o">.</span><span class="n">_curr</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">_steps</span><span class="p">[</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">curr_index</span><span class="p">]</span>
+        <span class="c1"># There is just one data object on generation strategy.</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_from_sqa</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="n">gs</span><span class="o">.</span><span class="n">_generator_runs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">generator_run_from_sqa</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span> <span class="k">for</span> <span class="n">gr</span> <span class="ow">in</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">generator_runs</span>
         <span class="p">]</span>

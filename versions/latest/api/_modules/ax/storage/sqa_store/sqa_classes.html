@@ -66,7 +66,7 @@ src="/js/documentation_options.js">
     <span class="n">String</span><span class="p">,</span>
     <span class="n">Text</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="k">import</span> <span class="n">relationship</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="k">import</span> <span class="n">backref</span><span class="p">,</span> <span class="n">relationship</span>
 
 
 <span class="n">ONLY_ONE_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"experiment_id"</span><span class="p">,</span> <span class="s2">"generator_run_id"</span><span class="p">]</span>
@@ -241,6 +241,9 @@ src="/js/documentation_options.js">
     <span class="n">experiment_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"experiment_v2.id"</span><span class="p">))</span>
     <span class="n">time_created</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">BigInteger</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">trial_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+    <span class="n">generation_strategy_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span>
+        <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">"generation_strategy.id"</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="n">unique_id</span> <span class="o">=</span> <span class="s2">"time_created"</span></div>
 
@@ -261,6 +264,10 @@ src="/js/documentation_options.js">
         <span class="n">cascade</span><span class="o">=</span><span class="s2">"all, delete-orphan"</span><span class="p">,</span>
         <span class="n">lazy</span><span class="o">=</span><span class="s2">"selectin"</span><span class="p">,</span>
         <span class="n">order_by</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">SQAGeneratorRun</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">data</span><span class="p">:</span> <span class="n">SQAData</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">"SQAData"</span><span class="p">,</span> <span class="n">cascade</span><span class="o">=</span><span class="s2">"all, delete-orphan"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span></div>
 
 
@@ -344,7 +351,10 @@ src="/js/documentation_options.js">
         <span class="s2">"SQATrial"</span><span class="p">,</span> <span class="n">cascade</span><span class="o">=</span><span class="s2">"all, delete-orphan"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">"selectin"</span>
     <span class="p">)</span>
     <span class="n">generation_strategy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SQAGenerationStrategy</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
-        <span class="s2">"SQAGenerationStrategy"</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">"experiment"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span>
+        <span class="s2">"SQAGenerationStrategy"</span><span class="p">,</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">backref</span><span class="p">(</span><span class="s2">"experiment"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">lazy</span><span class="o">=</span><span class="s2">"selectin"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">immutable_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"time_created"</span><span class="p">]</span></div>

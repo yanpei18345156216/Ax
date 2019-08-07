@@ -32,10 +32,14 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">ax.core.experiment</span> <span class="k">import</span> <span class="n">Experiment</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.db</span> <span class="k">import</span> <span class="n">session_scope</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.decoder</span> <span class="k">import</span> <span class="n">Decoder</span>
-<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_classes</span> <span class="k">import</span> <span class="n">SQAExperiment</span>
+<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_classes</span> <span class="k">import</span> <span class="n">SQAExperiment</span><span class="p">,</span> <span class="n">SQAGenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_config</span> <span class="k">import</span> <span class="n">SQAConfig</span>
+
+
+<span class="c1"># ---------------------------- Loading `Experiment`. ---------------------------</span>
 
 
 <div class="viewcode-block" id="load_experiment"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.load.load_experiment">[docs]</a><span class="k">def</span> <span class="nf">load_experiment</span><span class="p">(</span>
@@ -53,15 +57,74 @@ src="/js/documentation_options.js">
 <span class="sd">    1) Get SQLAlchemy object from DB.</span>
 <span class="sd">    2) Convert to corresponding Ax object.</span>
 <span class="sd">    """</span>
+    <span class="c1"># Convert SQA to user-facing class outside of session scope to avoid timeouts</span>
+    <span class="k">return</span> <span class="n">decoder</span><span class="o">.</span><span class="n">experiment_from_sqa</span><span class="p">(</span>
+        <span class="n">experiment_sqa</span><span class="o">=</span><span class="n">_get_experiment_sqa</span><span class="p">(</span><span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_experiment_sqa</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SQAExperiment</span><span class="p">:</span>
+    <span class="sd">"""Obtains SQLAlchemy experiment object from DB."""</span>
     <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
         <span class="n">sqa_experiment</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">SQAExperiment</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">)</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">sqa_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">"Experiment `</span><span class="si">{experiment_name}</span><span class="s2">` not found."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sqa_experiment</span>
 
-    <span class="c1"># Convert SQA to user-facing class outside of session scope to avoid timeouts</span>
-    <span class="k">return</span> <span class="n">decoder</span><span class="o">.</span><span class="n">experiment_from_sqa</span><span class="p">(</span><span class="n">sqa_experiment</span><span class="p">)</span>
+
+<span class="c1"># ------------------------ Loading `GenerationStrategy`. -----------------------</span>
+
+
+<div class="viewcode-block" id="load_generation_strategy_by_experiment_name"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.load.load_generation_strategy_by_experiment_name">[docs]</a><span class="k">def</span> <span class="nf">load_generation_strategy_by_experiment_name</span><span class="p">(</span>
+    <span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SQAConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
+    <span class="sd">"""Finds a generation strategy attached to an experiment specified by a name</span>
+<span class="sd">    and restores it from its corresponding SQA object.</span>
+<span class="sd">    """</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SQAConfig</span><span class="p">()</span>
+    <span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_load_generation_strategy_by_experiment_name</span><span class="p">(</span>
+        <span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">decoder</span><span class="o">=</span><span class="n">decoder</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_generation_strategy_by_id"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.load.load_generation_strategy_by_id">[docs]</a><span class="k">def</span> <span class="nf">load_generation_strategy_by_id</span><span class="p">(</span>
+    <span class="n">gs_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SQAConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
+    <span class="sd">"""Finds a generation strategy stored by a given ID and restores it."""</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SQAConfig</span><span class="p">()</span>
+    <span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_load_generation_strategy_by_id</span><span class="p">(</span><span class="n">gs_id</span><span class="o">=</span><span class="n">gs_id</span><span class="p">,</span> <span class="n">decoder</span><span class="o">=</span><span class="n">decoder</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_load_generation_strategy_by_id</span><span class="p">(</span><span class="n">gs_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
+    <span class="sd">"""Finds a generation strategy stored by a given ID and restores it."""</span>
+    <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">SQAGenerationStrategy</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">gs_id</span><span class="p">)</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">gs_sqa</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">"Generation strategy with ID #</span><span class="si">{gs_id}</span><span class="s2"> not found."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">decoder</span><span class="o">.</span><span class="n">generation_strategy_from_sqa</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">=</span><span class="n">gs_sqa</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_load_generation_strategy_by_experiment_name</span><span class="p">(</span>
+    <span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationStrategy</span><span class="p">:</span>
+    <span class="sd">"""Load a generation strategy attached to an experiment specified by a name,</span>
+<span class="sd">    using given Decoder instance.</span>
+
+<span class="sd">    1) Get SQLAlchemy object from DB.</span>
+<span class="sd">    2) Convert to corresponding Ax object.</span>
+<span class="sd">    """</span>
+    <span class="n">experiment_sqa</span> <span class="o">=</span> <span class="n">_get_experiment_sqa</span><span class="p">(</span><span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">experiment_sqa</span><span class="o">.</span><span class="n">generation_strategy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">"Experiment </span><span class="si">{experiment_name}</span><span class="s2"> does not have a generation strategy "</span>
+            <span class="s2">"attached to it."</span>
+        <span class="p">)</span>
+    <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">experiment_sqa</span><span class="o">.</span><span class="n">generation_strategy</span>
+    <span class="k">return</span> <span class="n">decoder</span><span class="o">.</span><span class="n">generation_strategy_from_sqa</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">=</span><span class="n">gs_sqa</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
