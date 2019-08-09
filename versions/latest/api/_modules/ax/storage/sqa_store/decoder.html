@@ -579,6 +579,7 @@ src="/js/documentation_options.js">
             <span class="c1"># pyre-ignore[16]: SQAGenerationStrategy does not have `experiment` attr.</span>
             <span class="n">gs</span><span class="o">.</span><span class="n">_experiment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_from_sqa</span><span class="p">(</span><span class="n">gs_sqa</span><span class="o">.</span><span class="n">experiment</span><span class="p">)</span>
             <span class="n">gs</span><span class="o">.</span><span class="n">_restore_model_from_generator_run</span><span class="p">()</span>
+        <span class="n">gs</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span>
         <span class="k">return</span> <span class="n">gs</span></div>
 
 <div class="viewcode-block" id="Decoder.runner_from_sqa"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.decoder.Decoder.runner_from_sqa">[docs]</a>    <span class="k">def</span> <span class="nf">runner_from_sqa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner_sqa</span><span class="p">:</span> <span class="n">SQARunner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Runner</span><span class="p">:</span>

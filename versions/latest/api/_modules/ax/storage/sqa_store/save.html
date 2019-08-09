@@ -35,6 +35,7 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.db</span> <span class="k">import</span> <span class="n">session_scope</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.encoder</span> <span class="k">import</span> <span class="n">Encoder</span>
+<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_classes</span> <span class="k">import</span> <span class="n">SQAGenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.sqa_config</span> <span class="k">import</span> <span class="n">SQAConfig</span>
 
 
@@ -99,37 +100,48 @@ src="/js/documentation_options.js">
     <span class="c1"># If the generation strategy has not yet generated anything, there will be no</span>
     <span class="c1"># experiment set on it.</span>
     <span class="k">if</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
-            <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">generation_strategy_to_sqa</span><span class="p">(</span>
-                <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="kc">None</span>
-            <span class="p">)</span>
+        <span class="n">experiment_id</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Experiment was set on the generation strategy, so we need to save it first.</span>
+        <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">experiment_id</span> <span class="o">=</span> <span class="n">_get_experiment_id</span><span class="p">(</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span>
+        <span class="p">)</span>
+
+    <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">generation_strategy_to_sqa</span><span class="p">(</span>
+        <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="n">experiment_id</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gs_sqa</span><span class="p">)</span>
             <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Ensures generation strategy id is set.</span>
-            <span class="k">return</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">existing_gs_sqa</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">SQAGenerationStrategy</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span>
+            <span class="p">)</span>
+            <span class="n">existing_gs_sqa</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gs_sqa</span><span class="p">)</span>
+            <span class="c1"># our update logic ignores foreign keys, i.e. fields ending in _id,</span>
+            <span class="c1"># because we want SQLAlchemy to handle those relationships for us</span>
+            <span class="c1"># however, generation_strategy.experiment_id is an exception, so we</span>
+            <span class="c1"># need to update that manually</span>
+            <span class="n">existing_gs_sqa</span><span class="o">.</span><span class="n">experiment_id</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">experiment_id</span>
 
-    <span class="c1"># Experiment was set on the generation strategy, so we need to save it first.</span>
-    <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_experiment_id</span><span class="p">(</span><span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="n">exp_sqa_class</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">class_to_sqa_class</span><span class="p">[</span><span class="n">Experiment</span><span class="p">]</span>
     <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
         <span class="n">sqa_experiment</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">exp_sqa_class</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">exp_sqa_class</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">experiment</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">sqa_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover (this is technically unreachable)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">"The undelying experiment must be saved before the generation strategy."</span>
         <span class="p">)</span>
-
-    <span class="c1"># Having saved the experiment, we can save the generation strategy with the</span>
-    <span class="c1"># experiment ID attached to it.</span>
-    <span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
-        <span class="n">gs_sqa</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">generation_strategy_to_sqa</span><span class="p">(</span>
-            <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="n">sqa_experiment</span><span class="o">.</span><span class="n">id</span>
-        <span class="p">)</span>
-        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gs_sqa</span><span class="p">)</span>
-        <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Ensures generation strategy id is set.</span>
-        <span class="k">return</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">id</span></div>
+    <span class="k">return</span> <span class="n">sqa_experiment</span><span class="o">.</span><span class="n">id</span>
 </pre></div>
 </div>
 </div>
