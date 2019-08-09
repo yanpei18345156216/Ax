@@ -172,13 +172,18 @@ src="/js/documentation_options.js">
                         <span class="s2">"sem"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">covariance</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
+
     <span class="c1"># Check that we have one ObservationFeatures per arm name since we</span>
-    <span class="c1"># key by arm name.</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cond_name_to_parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">):</span>
+    <span class="c1"># key by arm name and the model is not Multi-task.</span>
+    <span class="c1"># If "TrialAsTask" is present, one of the arms is also chosen.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s2">"TrialAsTask"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">cond_name_to_parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+    <span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">"Have observations of arms with different features but same"</span>
             <span class="s2">" name. Arbitrary one will be plotted."</span>
         <span class="p">)</span>
+
     <span class="c1"># Merge multiple measurements within each Observation with IVW to get</span>
     <span class="c1"># un-modeled prediction</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">IVW</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[])</span>

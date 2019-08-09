@@ -1,4 +1,3 @@
-
 from ax.benchmark.benchmark_problem import hartmann6
 
 import numpy as np
