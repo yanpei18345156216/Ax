@@ -37,7 +37,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # In[3]:
 
 
-BATCH_SIZE = 128
+BATCH_SIZE = 512
 train_loader, valid_loader, test_loader = load_mnist(batch_size=BATCH_SIZE)
 
 
@@ -168,10 +168,4 @@ test_accuracy = evaluate(
 
 
 print(f"Classification Accuracy (test set): {round(test_accuracy*100, 2)}%")
-
-
-# In[ ]:
-
-
-
 
