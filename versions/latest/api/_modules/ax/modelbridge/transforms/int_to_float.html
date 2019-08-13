@@ -29,7 +29,7 @@ src="/js/documentation_options.js">
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
 
 <span class="kn">from</span> <span class="nn">ax.core.observation</span> <span class="k">import</span> <span class="n">ObservationData</span><span class="p">,</span> <span class="n">ObservationFeatures</span>
 <span class="kn">from</span> <span class="nn">ax.core.parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">RangeParameter</span>
@@ -79,29 +79,31 @@ src="/js/documentation_options.js">
         <span class="k">return</span> <span class="n">observation_features</span></div>
 
 <div class="viewcode-block" id="IntToFloat.transform_search_space"><a class="viewcode-back" href="../../../../modelbridge.html#ax.modelbridge.transforms.int_to_float.IntToFloat.transform_search_space">[docs]</a>    <span class="k">def</span> <span class="nf">transform_search_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">SearchSpace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SearchSpace</span><span class="p">:</span>
-        <span class="n">transformed_parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">transformed_parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">search_space</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="c1"># Refine type, since we've only added RangeParameters above.</span>
             <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_parameters</span><span class="p">:</span>
                 <span class="c1"># pyre: p_cast is declared to have type `RangeParameter` but</span>
                 <span class="c1"># pyre-fixme[9]: is used as type `Parameter`.</span>
                 <span class="n">p_cast</span><span class="p">:</span> <span class="n">RangeParameter</span> <span class="o">=</span> <span class="n">p</span>
-                <span class="n">transformed_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">RangeParameter</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                        <span class="n">parameter_type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">,</span>
-                        <span class="n">lower</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
-                        <span class="n">upper</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span>
-                        <span class="n">log_scale</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">log_scale</span><span class="p">,</span>
-                        <span class="n">digits</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span>
-                    <span class="p">)</span>
+                <span class="n">transformed_parameters</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">RangeParameter</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">parameter_type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">,</span>
+                    <span class="n">lower</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
+                    <span class="n">upper</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span>
+                    <span class="n">log_scale</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">log_scale</span><span class="p">,</span>
+                    <span class="n">digits</span><span class="o">=</span><span class="n">p_cast</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">transformed_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">transformed_parameters</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+
         <span class="k">return</span> <span class="n">SearchSpace</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">=</span><span class="n">transformed_parameters</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">transformed_parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
             <span class="n">parameter_constraints</span><span class="o">=</span><span class="p">[</span>
-                <span class="n">pc</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">for</span> <span class="n">pc</span> <span class="ow">in</span> <span class="n">search_space</span><span class="o">.</span><span class="n">parameter_constraints</span>
+                <span class="n">pc</span><span class="o">.</span><span class="n">clone_with_transformed_parameters</span><span class="p">(</span>
+                    <span class="n">transformed_parameters</span><span class="o">=</span><span class="n">transformed_parameters</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">pc</span> <span class="ow">in</span> <span class="n">search_space</span><span class="o">.</span><span class="n">parameter_constraints</span>
             <span class="p">],</span>
         <span class="p">)</span></div>
 
