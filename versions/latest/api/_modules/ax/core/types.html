@@ -51,7 +51,7 @@ src="/js/documentation_options.js">
 <span class="n">TModelPredictArm</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]]</span>
 
 <span class="c1"># 1-arm `Trial` evaluation data: {metric_name -&gt; (mean, standard error)}}.</span>
-<span class="n">TTrialEvaluation</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+<span class="n">TTrialEvaluation</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]</span>
 
 <span class="c1"># 1-arm evaluation data with trace fidelities</span>
 <span class="n">TFidelityTrialEvaluation</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">TParameterization</span><span class="p">,</span> <span class="n">TTrialEvaluation</span><span class="p">]]</span>
@@ -62,7 +62,7 @@ src="/js/documentation_options.js">
 <span class="c1"># 3) only the mean, and we assume metric name == objective name and standard error == 0</span>
 <span class="c1"># 4) [({fidelity_param -&gt; value}, {metric_name} -&gt; (mean, standard error))]</span>
 <span class="n">TEvaluationOutcome</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
-    <span class="n">TTrialEvaluation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">,</span> <span class="n">TFidelityTrialEvaluation</span>
+    <span class="n">TTrialEvaluation</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">,</span> <span class="n">TFidelityTrialEvaluation</span>
 <span class="p">]</span>
 
 <span class="n">TConfig</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">AcquisitionFunction</span><span class="p">]]</span>

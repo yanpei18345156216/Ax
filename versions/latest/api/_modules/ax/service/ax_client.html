@@ -40,9 +40,11 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">ax.core.trial</span> <span class="k">import</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">ax.core.types</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">TEvaluationOutcome</span><span class="p">,</span>
+    <span class="n">TFidelityTrialEvaluation</span><span class="p">,</span>
     <span class="n">TModelPredictArm</span><span class="p">,</span>
     <span class="n">TParameterization</span><span class="p">,</span>
     <span class="n">TParamValue</span><span class="p">,</span>
+    <span class="n">TTrialEvaluation</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.modelbridge.modelbridge_utils</span> <span class="k">import</span> <span class="n">get_pending_observation_features</span>
@@ -240,26 +242,13 @@ src="/js/documentation_options.js">
         <span class="c1"># [(fidelities, {metric_name -&gt; (mean, SEM)})]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evaluations</span><span class="p">[</span><span class="n">arm_name</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="o">.</span><span class="n">from_evaluations</span><span class="p">(</span>
-                <span class="n">evaluations</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span>
-                    <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span> <span class="n">evaluations</span>
-                <span class="p">),</span>
+                <span class="n">evaluations</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TTrialEvaluation</span><span class="p">],</span> <span class="n">evaluations</span><span class="p">),</span>
                 <span class="n">trial_index</span><span class="o">=</span><span class="n">trial</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
                 <span class="n">sample_sizes</span><span class="o">=</span><span class="n">sample_sizes</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="o">.</span><span class="n">from_fidelity_evaluations</span><span class="p">(</span>
-                <span class="n">evaluations</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span>
-                    <span class="n">Dict</span><span class="p">[</span>
-                        <span class="nb">str</span><span class="p">,</span>
-                        <span class="n">List</span><span class="p">[</span>
-                            <span class="n">Tuple</span><span class="p">[</span>
-                                <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]],</span>
-                                <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
-                            <span class="p">]</span>
-                        <span class="p">],</span>
-                    <span class="p">],</span>
-                    <span class="n">evaluations</span><span class="p">,</span>
-                <span class="p">),</span>
+                <span class="n">evaluations</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TFidelityTrialEvaluation</span><span class="p">],</span> <span class="n">evaluations</span><span class="p">),</span>
                 <span class="n">trial_index</span><span class="o">=</span><span class="n">trial</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
                 <span class="n">sample_sizes</span><span class="o">=</span><span class="n">sample_sizes</span><span class="p">,</span>
             <span class="p">)</span>
