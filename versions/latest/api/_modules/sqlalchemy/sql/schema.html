@@ -1635,7 +1635,7 @@ src="/js/documentation_options.js">
         <span class="n">c</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">selectable</span>
         <span class="n">selectable</span><span class="o">.</span><span class="n">_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">selectable</span><span class="o">.</span><span class="n">_is_clone_of</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">c</span><span class="o">.</span><span class="n">_is_clone_of</span> <span class="o">=</span> <span class="n">selectable</span><span class="o">.</span><span class="n">_is_clone_of</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">_is_clone_of</span> <span class="o">=</span> <span class="n">selectable</span><span class="o">.</span><span class="n">_is_clone_of</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_key</span><span class="p">:</span>
             <span class="n">selectable</span><span class="o">.</span><span class="n">primary_key</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">dispatch</span><span class="o">.</span><span class="n">after_parent_attach</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">selectable</span><span class="p">)</span>
@@ -2757,7 +2757,9 @@ src="/js/documentation_options.js">
 
 
 <span class="k">def</span> <span class="nf">_to_schema_column_or_string</span><span class="p">(</span><span class="n">element</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="s2">"__clause_element__"</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">element</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">element</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="s2">"__clause_element__"</span><span class="p">):</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">__clause_element__</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">string_types</span> <span class="o">+</span> <span class="p">(</span><span class="n">ColumnElement</span><span class="p">,)):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Element </span><span class="si">%r</span><span class="s2"> is not a string name or column element"</span>
@@ -2854,11 +2856,16 @@ src="/js/documentation_options.js">
                     <span class="p">)</span>
                 <span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_col_expressions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span> <span class="k">else</span> <span class="n">col</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_colargs</span>
+        <span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">_set_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_colargs</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-                <span class="n">col</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_col_expressions</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">ColumnCollectionConstraint</span><span class="p">(</span><span class="n">ColumnCollectionMixin</span><span class="p">,</span> <span class="n">Constraint</span><span class="p">):</span>
@@ -3659,8 +3666,7 @@ src="/js/documentation_options.js">
             <span class="n">strname</span><span class="p">,</span>
             <span class="n">add_element</span><span class="p">,</span>
         <span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_col_expression_collection</span><span class="p">(</span><span class="n">expressions</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">add_element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_element</span><span class="p">)</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_element</span><span class="p">)</span>
             <span class="n">processed_expressions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">expressions</span> <span class="o">=</span> <span class="n">processed_expressions</span>
@@ -3698,11 +3704,12 @@ src="/js/documentation_options.js">
         <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
         <span class="n">table</span><span class="o">.</span><span class="n">indexes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
+        <span class="n">expressions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expressions</span>
+        <span class="n">col_expressions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_col_expressions</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">expressions</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">col_expressions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expressions</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">expr</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">ClauseElement</span><span class="p">)</span> <span class="k">else</span> <span class="n">colexpr</span>
-            <span class="k">for</span> <span class="n">expr</span><span class="p">,</span> <span class="n">colexpr</span> <span class="ow">in</span> <span class="n">util</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">expressions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span>
-            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">expr</span><span class="p">,</span> <span class="n">colexpr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">expressions</span><span class="p">,</span> <span class="n">col_expressions</span><span class="p">)</span>
         <span class="p">]</span>
 
     <span class="nd">@property</span>

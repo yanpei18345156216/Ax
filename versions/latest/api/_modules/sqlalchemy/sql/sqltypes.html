@@ -2069,6 +2069,26 @@ src="/js/documentation_options.js">
 <span class="sd">    values, but care must be taken as to the value of the</span>
 <span class="sd">    :paramref:`.JSON.none_as_null` in these cases.</span>
 
+<span class="sd">    The JSON serializer and deserializer used by :class:`.JSON` defaults to</span>
+<span class="sd">    Python's ``json.dumps`` and ``json.loads`` functions; in the case of the</span>
+<span class="sd">    psycopg2 dialect, psycopg2 may be using its own custom loader function.</span>
+
+<span class="sd">    In order to affect the serializer / deserializer, they are currently</span>
+<span class="sd">    configurable at the :func:`.create_engine` level via the</span>
+<span class="sd">    :paramref:`.create_engine.json_serializer` and</span>
+<span class="sd">    :paramref:`.create_engine.json_deserializer` parameters.  For example,</span>
+<span class="sd">    to turn off ``ensure_ascii``::</span>
+
+<span class="sd">        engine = create_engine(</span>
+<span class="sd">            "sqlite://",</span>
+<span class="sd">            json_serializer=lambda obj: json.dumps(obj, ensure_ascii=False))</span>
+
+<span class="sd">    .. versionchanged:: 1.3.7</span>
+
+<span class="sd">        SQLite dialect's ``json_serializer`` and ``json_deserializer``</span>
+<span class="sd">        parameters renamed from ``_json_serializer`` and</span>
+<span class="sd">        ``_json_deserializer``.</span>
+
 <span class="sd">    .. seealso::</span>
 
 <span class="sd">        :class:`.postgresql.JSON`</span>

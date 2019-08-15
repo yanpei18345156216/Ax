@@ -237,28 +237,28 @@ src="/js/documentation_options.js">
             <span class="n">lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lower</span>
         <span class="k">if</span> <span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upper</span>
-        <span class="n">casted_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
-        <span class="n">casted_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+        <span class="n">cast_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+        <span class="n">cast_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_range_param</span><span class="p">(</span>
-            <span class="n">lower</span><span class="o">=</span><span class="n">casted_lower</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">casted_upper</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_scale</span>
+            <span class="n">lower</span><span class="o">=</span><span class="n">cast_lower</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">cast_upper</span><span class="p">,</span> <span class="n">log_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_scale</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lower</span> <span class="o">=</span> <span class="n">casted_lower</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_upper</span> <span class="o">=</span> <span class="n">casted_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lower</span> <span class="o">=</span> <span class="n">cast_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_upper</span> <span class="o">=</span> <span class="n">cast_upper</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="RangeParameter.set_digits"><a class="viewcode-back" href="../../../core.html#ax.RangeParameter.set_digits">[docs]</a>    <span class="k">def</span> <span class="nf">set_digits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"RangeParameter"</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span> <span class="o">=</span> <span class="n">digits</span>
 
         <span class="c1"># Re-scale min and max to new digits definition</span>
-        <span class="n">casted_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lower</span><span class="p">)</span>
-        <span class="n">casted_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">casted_lower</span> <span class="o">&gt;=</span> <span class="n">casted_upper</span><span class="p">:</span>
+        <span class="n">cast_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lower</span><span class="p">)</span>
+        <span class="n">cast_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cast_lower</span> <span class="o">&gt;=</span> <span class="n">cast_upper</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="n">f</span><span class="s2">"Lower bound </span><span class="si">{casted_lower}</span><span class="s2"> is &gt;= upper bound </span><span class="si">{casted_upper}</span><span class="s2">."</span>
+                <span class="n">f</span><span class="s2">"Lower bound </span><span class="si">{cast_lower}</span><span class="s2"> is &gt;= upper bound </span><span class="si">{cast_upper}</span><span class="s2">."</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lower</span> <span class="o">=</span> <span class="n">casted_lower</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_upper</span> <span class="o">=</span> <span class="n">casted_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lower</span> <span class="o">=</span> <span class="n">cast_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_upper</span> <span class="o">=</span> <span class="n">cast_upper</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="RangeParameter.set_log_scale"><a class="viewcode-back" href="../../../core.html#ax.RangeParameter.set_log_scale">[docs]</a>    <span class="k">def</span> <span class="nf">set_log_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_scale</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"RangeParameter"</span><span class="p">:</span>

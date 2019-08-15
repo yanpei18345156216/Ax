@@ -83,7 +83,7 @@ src="/js/documentation_options.js">
         <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]],</span>
         <span class="n">Any</span><span class="p">,</span>
     <span class="p">],</span>
-    <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span>
 <span class="p">]</span>
 
 
@@ -174,15 +174,16 @@ src="/js/documentation_options.js">
 <span class="sd">            fixed_features,</span>
 <span class="sd">            rounding_func,</span>
 <span class="sd">            **kwargs,</span>
-<span class="sd">        ) -&gt; candidates</span>
+<span class="sd">        ) -&gt; (candidates, acq_values)</span>
 
-<span class="sd">    Here `acq_function` is a botorch `AcquisitionFunciton`, `bounds` is a</span>
+<span class="sd">    Here `acq_function` is a BoTorch `AcquisitionFunction`, `bounds` is a</span>
 <span class="sd">    tensor containing bounds on the parameters, `n` is the number of</span>
 <span class="sd">    candidates to be generated, `inequality_constraints` are inequality</span>
 <span class="sd">    constraints on parameter values, `fixed_features` specifies features that</span>
 <span class="sd">    should be fixed during generation, and `rounding_func` is a callback</span>
 <span class="sd">    that rounds an optimization result appropriately. `candidates` is</span>
-<span class="sd">    a tensor of generated candidates. For additional details on the</span>
+<span class="sd">    a tensor of generated candidates, and `acq_values` are the acquisition</span>
+<span class="sd">    values associated with the candidates. For additional details on the</span>
 <span class="sd">    arguments, see `scipy_optimizer`.</span>
 <span class="sd">    """</span>
 
@@ -339,13 +340,24 @@ src="/js/documentation_options.js">
         <span class="k">else</span><span class="p">:</span>
             <span class="n">inequality_constraints</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acqf_optimizer</span><span class="p">(</span>  <span class="c1"># pyre-ignore: [28]</span>
+        <span class="k">if</span> <span class="n">rounding_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">botorch_rounding_func</span> <span class="o">=</span> <span class="n">rounding_func</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># make sure rounding_func is properly applied to q- and t-batches</span>
+            <span class="k">def</span> <span class="nf">botorch_rounding_func</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+                <span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">X_round</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">rounding_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>  <span class="c1"># pyre-ignore: [16]</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">X_round</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acqf_optimizer</span><span class="p">(</span>  <span class="c1"># pyre-ignore: [28]</span>
             <span class="n">acq_function</span><span class="o">=</span><span class="n">checked_cast</span><span class="p">(</span><span class="n">AcquisitionFunction</span><span class="p">,</span> <span class="n">acquisition_function</span><span class="p">),</span>
             <span class="n">bounds</span><span class="o">=</span><span class="n">bounds_</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
             <span class="n">inequality_constraints</span><span class="o">=</span><span class="n">inequality_constraints</span><span class="p">,</span>
             <span class="n">fixed_features</span><span class="o">=</span><span class="n">fixed_features</span><span class="p">,</span>
-            <span class="n">rounding_func</span><span class="o">=</span><span class="n">rounding_func</span><span class="p">,</span>
+            <span class="n">rounding_func</span><span class="o">=</span><span class="n">botorch_rounding_func</span><span class="p">,</span>
             <span class="o">**</span><span class="n">optimizer_options</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">candidates</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>

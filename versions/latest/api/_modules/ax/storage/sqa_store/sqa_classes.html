@@ -215,7 +215,7 @@ src="/js/documentation_options.js">
         <span class="s2">"SQAParameterConstraint"</span><span class="p">,</span> <span class="n">cascade</span><span class="o">=</span><span class="s2">"all, delete-orphan"</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s2">"selectin"</span>
     <span class="p">)</span>
 
-    <span class="n">immutable_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"time_created"</span><span class="p">]</span>
+    <span class="n">ignore_during_update_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"time_created"</span><span class="p">]</span>
     <span class="n">unique_id</span> <span class="o">=</span> <span class="s2">"index"</span></div>
 
 
@@ -309,7 +309,8 @@ src="/js/documentation_options.js">
     <span class="p">)</span>
 
     <span class="n">unique_id</span> <span class="o">=</span> <span class="s2">"index"</span>
-    <span class="n">immutable_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"is_batch"</span><span class="p">,</span> <span class="s2">"time_created"</span><span class="p">]</span></div>
+    <span class="n">ignore_during_update_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"time_created"</span><span class="p">]</span>
+    <span class="n">immutable_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"is_batch"</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="SQAExperiment"><a class="viewcode-back" href="../../../../storage.html#ax.storage.sqa_store.sqa_classes.SQAExperiment">[docs]</a><span class="k">class</span> <span class="nc">SQAExperiment</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
