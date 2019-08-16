@@ -30,12 +30,12 @@ src="/js/documentation_options.js">
 <span class="c1"># Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.</span>
 
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ax.core.observation</span> <span class="k">import</span> <span class="n">ObservationFeatures</span>
 <span class="kn">from</span> <span class="nn">ax.modelbridge.base</span> <span class="k">import</span> <span class="n">ModelBridge</span>
-<span class="kn">from</span> <span class="nn">ax.plot.base</span> <span class="k">import</span> <span class="n">AxPlotConfig</span><span class="p">,</span> <span class="n">AxPlotTypes</span>
+<span class="kn">from</span> <span class="nn">ax.plot.base</span> <span class="k">import</span> <span class="n">AxPlotConfig</span><span class="p">,</span> <span class="n">AxPlotTypes</span><span class="p">,</span> <span class="n">PlotData</span>
 <span class="kn">from</span> <span class="nn">ax.plot.helper</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">TNullableGeneratorRunsDict</span><span class="p">,</span>
     <span class="n">get_fixed_values</span><span class="p">,</span>
@@ -43,6 +43,94 @@ src="/js/documentation_options.js">
     <span class="n">get_plot_data</span><span class="p">,</span>
     <span class="n">get_range_parameter</span><span class="p">,</span>
 <span class="p">)</span>
+
+
+<span class="c1"># type aliases</span>
+<span class="n">SlicePredictions</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span>
+    <span class="n">PlotData</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
+    <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">,</span>
+    <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="nb">bool</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_slice_predictions</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">ModelBridge</span><span class="p">,</span>
+    <span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">metric_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">generator_runs_dict</span><span class="p">:</span> <span class="n">TNullableGeneratorRunsDict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">density</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">slice_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fixed_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ObservationFeatures</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SlicePredictions</span><span class="p">:</span>
+    <span class="sd">"""Computes slice prediction configuration values for a single metric name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: ModelBridge that contains model for predictions</span>
+<span class="sd">        param_name: Name of parameter that will be sliced</span>
+<span class="sd">        metric_name: Name of metric to plot</span>
+<span class="sd">        generator_runs_dict: A dictionary {name: generator run} of generator runs</span>
+<span class="sd">            whose arms will be plotted, if they lie in the slice.</span>
+<span class="sd">        relative: Predictions relative to status quo</span>
+<span class="sd">        density: Number of points along slice to evaluate predictions.</span>
+<span class="sd">        slice_values: A dictionary {name: val} for the fixed values of the</span>
+<span class="sd">            other parameters. If not provided, then the status quo values will</span>
+<span class="sd">            be used if there is a status quo, otherwise the mean of numeric</span>
+<span class="sd">            parameters or the mode of choice parameters. Ignored if</span>
+<span class="sd">            fixed_features is specified.</span>
+<span class="sd">        fixed_features: An ObservationFeatures object containing the values of</span>
+<span class="sd">            features (including non-parameter features like context) to be set</span>
+<span class="sd">            in the slice.</span>
+
+<span class="sd">    Returns: Configruation values for AxPlotConfig.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">generator_runs_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">generator_runs_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">parameter</span> <span class="o">=</span> <span class="n">get_range_parameter</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">get_grid_for_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+
+    <span class="n">plot_data</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">cond_name_to_parameters</span> <span class="o">=</span> <span class="n">get_plot_data</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">generator_runs_dict</span><span class="o">=</span><span class="n">generator_runs_dict</span><span class="p">,</span> <span class="n">metric_names</span><span class="o">=</span><span class="p">{</span><span class="n">metric_name</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fixed_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">slice_values</span> <span class="o">=</span> <span class="n">fixed_features</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fixed_features</span> <span class="o">=</span> <span class="n">ObservationFeatures</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">fixed_values</span> <span class="o">=</span> <span class="n">get_fixed_values</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">slice_values</span><span class="p">)</span>
+
+    <span class="n">prediction_features</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+        <span class="n">predf</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">fixed_features</span><span class="p">)</span>
+        <span class="n">predf</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">fixed_values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">predf</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">prediction_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predf</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">prediction_features</span><span class="p">)</span>
+    <span class="n">f_plt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span>
+    <span class="n">sd_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">metric_name</span><span class="p">][</span><span class="n">metric_name</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">plot_data</span><span class="p">,</span>
+        <span class="n">cond_name_to_parameters</span><span class="p">,</span>
+        <span class="n">f_plt</span><span class="p">,</span>
+        <span class="n">raw_data</span><span class="p">,</span>
+        <span class="n">grid</span><span class="p">,</span>
+        <span class="n">metric_name</span><span class="p">,</span>
+        <span class="n">param_name</span><span class="p">,</span>
+        <span class="n">relative</span><span class="p">,</span>
+        <span class="n">fixed_values</span><span class="p">,</span>
+        <span class="n">sd_plt</span><span class="p">,</span>
+        <span class="n">parameter</span><span class="o">.</span><span class="n">log_scale</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="plot_slice"><a class="viewcode-back" href="../../../plot.html#ax.plot.slice.plot_slice">[docs]</a><span class="k">def</span> <span class="nf">plot_slice</span><span class="p">(</span>
@@ -74,15 +162,77 @@ src="/js/documentation_options.js">
 <span class="sd">            features (including non-parameter features like context) to be set</span>
 <span class="sd">            in the slice.</span>
 <span class="sd">    """</span>
+    <span class="n">pd</span><span class="p">,</span> <span class="n">cntp</span><span class="p">,</span> <span class="n">f_plt</span><span class="p">,</span> <span class="n">rd</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">fv</span><span class="p">,</span> <span class="n">sd_plt</span><span class="p">,</span> <span class="n">ls</span> <span class="o">=</span> <span class="n">_get_slice_predictions</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">param_name</span><span class="o">=</span><span class="n">param_name</span><span class="p">,</span>
+        <span class="n">metric_name</span><span class="o">=</span><span class="n">metric_name</span><span class="p">,</span>
+        <span class="n">generator_runs_dict</span><span class="o">=</span><span class="n">generator_runs_dict</span><span class="p">,</span>
+        <span class="n">relative</span><span class="o">=</span><span class="n">relative</span><span class="p">,</span>
+        <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span>
+        <span class="n">slice_values</span><span class="o">=</span><span class="n">slice_values</span><span class="p">,</span>
+        <span class="n">fixed_features</span><span class="o">=</span><span class="n">fixed_features</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"arm_data"</span><span class="p">:</span> <span class="n">pd</span><span class="p">,</span>
+        <span class="s2">"arm_name_to_parameters"</span><span class="p">:</span> <span class="n">cntp</span><span class="p">,</span>
+        <span class="s2">"f"</span><span class="p">:</span> <span class="n">f_plt</span><span class="p">,</span>
+        <span class="s2">"fit_data"</span><span class="p">:</span> <span class="n">rd</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">grid</span><span class="p">,</span>
+        <span class="s2">"metric"</span><span class="p">:</span> <span class="n">metric_name</span><span class="p">,</span>
+        <span class="s2">"param"</span><span class="p">:</span> <span class="n">param_name</span><span class="p">,</span>
+        <span class="s2">"rel"</span><span class="p">:</span> <span class="n">relative</span><span class="p">,</span>
+        <span class="s2">"setx"</span><span class="p">:</span> <span class="n">fv</span><span class="p">,</span>
+        <span class="s2">"sd"</span><span class="p">:</span> <span class="n">sd_plt</span><span class="p">,</span>
+        <span class="s2">"is_log"</span><span class="p">:</span> <span class="n">ls</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">AxPlotConfig</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="n">AxPlotTypes</span><span class="o">.</span><span class="n">SLICE</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="interact_slice"><a class="viewcode-back" href="../../../plot.html#ax.plot.slice.interact_slice">[docs]</a><span class="k">def</span> <span class="nf">interact_slice</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">ModelBridge</span><span class="p">,</span>
+    <span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">metric_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">generator_runs_dict</span><span class="p">:</span> <span class="n">TNullableGeneratorRunsDict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">density</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">slice_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fixed_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ObservationFeatures</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AxPlotConfig</span><span class="p">:</span>
+    <span class="sd">"""Create interactive plot with predictions for a 1-d slice of the parameter</span>
+<span class="sd">    space.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: ModelBridge that contains model for predictions</span>
+<span class="sd">        param_name: Name of parameter that will be sliced</span>
+<span class="sd">        metric_name: Name of metric to plot</span>
+<span class="sd">        generator_runs_dict: A dictionary {name: generator run} of generator runs</span>
+<span class="sd">            whose arms will be plotted, if they lie in the slice.</span>
+<span class="sd">        relative: Predictions relative to status quo</span>
+<span class="sd">        density: Number of points along slice to evaluate predictions.</span>
+<span class="sd">        slice_values: A dictionary {name: val} for the fixed values of the</span>
+<span class="sd">            other parameters. If not provided, then the status quo values will</span>
+<span class="sd">            be used if there is a status quo, otherwise the mean of numeric</span>
+<span class="sd">            parameters or the mode of choice parameters. Ignored if</span>
+<span class="sd">            fixed_features is specified.</span>
+<span class="sd">        fixed_features: An ObservationFeatures object containing the values of</span>
+<span class="sd">            features (including non-parameter features like context) to be set</span>
+<span class="sd">            in the slice.</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">generator_runs_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">generator_runs_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">metric_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metric_names</span><span class="p">)</span>
 
     <span class="n">parameter</span> <span class="o">=</span> <span class="n">get_range_parameter</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">get_grid_for_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
 
-    <span class="n">plot_data</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">,</span> <span class="n">cond_name_to_parameters</span> <span class="o">=</span> <span class="n">get_plot_data</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">generator_runs_dict</span><span class="o">=</span><span class="n">generator_runs_dict</span><span class="p">,</span> <span class="n">metric_names</span><span class="o">=</span><span class="p">{</span><span class="n">metric_name</span><span class="p">}</span>
-    <span class="p">)</span>
+    <span class="n">plot_data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">raw_data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">sd_plt_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">cond_name_to_parameters_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">is_log_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">if</span> <span class="n">fixed_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">slice_values</span> <span class="o">=</span> <span class="n">fixed_features</span><span class="o">.</span><span class="n">parameters</span>
@@ -99,23 +249,39 @@ src="/js/documentation_options.js">
 
     <span class="n">f</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">prediction_features</span><span class="p">)</span>
 
-    <span class="n">f_plt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span>
-    <span class="n">sd_plt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">metric_name</span><span class="p">][</span><span class="n">metric_name</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">metric_names</span><span class="p">:</span>
+        <span class="n">pd</span><span class="p">,</span> <span class="n">cntp</span><span class="p">,</span> <span class="n">f_plt</span><span class="p">,</span> <span class="n">rd</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sd_plt</span><span class="p">,</span> <span class="n">ls</span> <span class="o">=</span> <span class="n">_get_slice_predictions</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">param_name</span><span class="o">=</span><span class="n">param_name</span><span class="p">,</span>
+            <span class="n">metric_name</span><span class="o">=</span><span class="n">metric_name</span><span class="p">,</span>
+            <span class="n">generator_runs_dict</span><span class="o">=</span><span class="n">generator_runs_dict</span><span class="p">,</span>
+            <span class="n">relative</span><span class="o">=</span><span class="n">relative</span><span class="p">,</span>
+            <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span>
+            <span class="n">slice_values</span><span class="o">=</span><span class="n">slice_values</span><span class="p">,</span>
+            <span class="n">fixed_features</span><span class="o">=</span><span class="n">fixed_features</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">plot_data_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span>
+        <span class="n">raw_data_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">rd</span>
+        <span class="n">cond_name_to_parameters_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cntp</span>
+
+        <span class="n">sd_plt_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">metric_name</span><span class="p">][</span><span class="n">metric_name</span><span class="p">])</span>
+        <span class="n">is_log_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"arm_data"</span><span class="p">:</span> <span class="n">plot_data</span><span class="p">,</span>
-        <span class="s2">"arm_name_to_parameters"</span><span class="p">:</span> <span class="n">cond_name_to_parameters</span><span class="p">,</span>
-        <span class="s2">"f"</span><span class="p">:</span> <span class="n">f_plt</span><span class="p">,</span>
-        <span class="s2">"fit_data"</span><span class="p">:</span> <span class="n">raw_data</span><span class="p">,</span>
+        <span class="s2">"arm_data"</span><span class="p">:</span> <span class="n">plot_data_dict</span><span class="p">,</span>
+        <span class="s2">"arm_name_to_parameters"</span><span class="p">:</span> <span class="n">cond_name_to_parameters_dict</span><span class="p">,</span>
+        <span class="s2">"f"</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+        <span class="s2">"fit_data"</span><span class="p">:</span> <span class="n">raw_data_dict</span><span class="p">,</span>
         <span class="s2">"grid"</span><span class="p">:</span> <span class="n">grid</span><span class="p">,</span>
-        <span class="s2">"metric"</span><span class="p">:</span> <span class="n">metric_name</span><span class="p">,</span>
+        <span class="s2">"metrics"</span><span class="p">:</span> <span class="n">metric_names</span><span class="p">,</span>
         <span class="s2">"param"</span><span class="p">:</span> <span class="n">param_name</span><span class="p">,</span>
         <span class="s2">"rel"</span><span class="p">:</span> <span class="n">relative</span><span class="p">,</span>
         <span class="s2">"setx"</span><span class="p">:</span> <span class="n">fixed_values</span><span class="p">,</span>
-        <span class="s2">"sd"</span><span class="p">:</span> <span class="n">sd_plt</span><span class="p">,</span>
-        <span class="s2">"is_log"</span><span class="p">:</span> <span class="n">parameter</span><span class="o">.</span><span class="n">log_scale</span><span class="p">,</span>
+        <span class="s2">"sd"</span><span class="p">:</span> <span class="n">sd_plt_dict</span><span class="p">,</span>
+        <span class="s2">"is_log"</span><span class="p">:</span> <span class="n">is_log_dict</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">AxPlotConfig</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="n">AxPlotTypes</span><span class="o">.</span><span class="n">SLICE</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">AxPlotConfig</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="n">AxPlotTypes</span><span class="o">.</span><span class="n">INTERACT_SLICE</span><span class="p">)</span></div>
 </pre></div>
 </div>
 </div>

@@ -231,6 +231,7 @@ src="/js/documentation_options.js">
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_features</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fidelity_features</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fidelity_model_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fidelity_model_id"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BotorchModel.fit"><a class="viewcode-back" href="../../../../models.html#ax.models.torch.botorch.BotorchModel.fit">[docs]</a>    <span class="nd">@copy_doc</span><span class="p">(</span><span class="n">TorchModel</span><span class="o">.</span><span class="n">fit</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
@@ -256,6 +257,7 @@ src="/js/documentation_options.js">
             <span class="n">Yvars</span><span class="o">=</span><span class="n">Yvars</span><span class="p">,</span>
             <span class="n">task_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_features</span><span class="p">,</span>
             <span class="n">fidelity_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_features</span><span class="p">,</span>
+            <span class="n">fidelity_model_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_model_id</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BotorchModel.predict"><a class="viewcode-back" href="../../../../models.html#ax.models.torch.botorch.BotorchModel.predict">[docs]</a>    <span class="nd">@copy_doc</span><span class="p">(</span><span class="n">TorchModel</span><span class="o">.</span><span class="n">predict</span><span class="p">)</span>
@@ -340,16 +342,7 @@ src="/js/documentation_options.js">
         <span class="k">else</span><span class="p">:</span>
             <span class="n">inequality_constraints</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">rounding_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">botorch_rounding_func</span> <span class="o">=</span> <span class="n">rounding_func</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># make sure rounding_func is properly applied to q- and t-batches</span>
-            <span class="k">def</span> <span class="nf">botorch_rounding_func</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-                <span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">X_round</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-                    <span class="p">[</span><span class="n">rounding_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>  <span class="c1"># pyre-ignore: [16]</span>
-                <span class="p">)</span>
-                <span class="k">return</span> <span class="n">X_round</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+        <span class="n">botorch_rounding_func</span> <span class="o">=</span> <span class="n">get_rounding_func</span><span class="p">(</span><span class="n">rounding_func</span><span class="p">)</span>
 
         <span class="n">candidates</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acqf_optimizer</span><span class="p">(</span>  <span class="c1"># pyre-ignore: [28]</span>
             <span class="n">acq_function</span><span class="o">=</span><span class="n">checked_cast</span><span class="p">(</span><span class="n">AcquisitionFunction</span><span class="p">,</span> <span class="n">acquisition_function</span><span class="p">),</span>
@@ -407,6 +400,7 @@ src="/js/documentation_options.js">
             <span class="n">task_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_features</span><span class="p">,</span>
             <span class="n">state_dict</span><span class="o">=</span><span class="n">state_dict</span><span class="p">,</span>
             <span class="n">fidelity_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_features</span><span class="p">,</span>
+            <span class="n">fidelity_model_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_model_id</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_predictor</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_test</span><span class="p">)</span>  <span class="c1"># pyre-ignore: [28]</span></div>
 
@@ -428,7 +422,25 @@ src="/js/documentation_options.js">
             <span class="n">task_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_features</span><span class="p">,</span>
             <span class="n">state_dict</span><span class="o">=</span><span class="n">state_dict</span><span class="p">,</span>
             <span class="n">fidelity_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_features</span><span class="p">,</span>
+            <span class="n">fidelity_model_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fidelity_model_id</span><span class="p">,</span>
         <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="get_rounding_func"><a class="viewcode-back" href="../../../../models.html#ax.models.torch.botorch.get_rounding_func">[docs]</a><span class="k">def</span> <span class="nf">get_rounding_func</span><span class="p">(</span>
+    <span class="n">rounding_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">rounding_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">botorch_rounding_func</span> <span class="o">=</span> <span class="n">rounding_func</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># make sure rounding_func is properly applied to q- and t-batches</span>
+        <span class="k">def</span> <span class="nf">botorch_rounding_func</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+            <span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">X_round</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">rounding_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>  <span class="c1"># pyre-ignore: [16]</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">X_round</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">botorch_rounding_func</span></div>
 </pre></div>
 </div>
 </div>

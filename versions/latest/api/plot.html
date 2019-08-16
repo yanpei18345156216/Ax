@@ -59,6 +59,10 @@ src="/js/documentation_options.js">
 <code class="sig-name descname">INTERACT_CONTOUR</code><em class="property"> = 3</em><a class="headerlink" href="#ax.plot.base.AxPlotTypes.INTERACT_CONTOUR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="attribute">
+<dt id="ax.plot.base.AxPlotTypes.INTERACT_SLICE">
+<code class="sig-name descname">INTERACT_SLICE</code><em class="property"> = 5</em><a class="headerlink" href="#ax.plot.base.AxPlotTypes.INTERACT_SLICE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="attribute">
 <dt id="ax.plot.base.AxPlotTypes.SLICE">
 <code class="sig-name descname">SLICE</code><em class="property"> = 2</em><a class="headerlink" href="#ax.plot.base.AxPlotTypes.SLICE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -512,7 +516,7 @@ in the model will be returned.</p></li>
 <span id="rendering"></span><h3>Rendering<a class="headerlink" href="#module-ax.plot.render" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="ax.plot.render.plot_config_to_html">
-<code class="sig-prename descclassname">ax.plot.render.</code><code class="sig-name descname">plot_config_to_html</code><span class="sig-paren">(</span><em class="sig-param">plot_config</em>, <em class="sig-param">plot_module_name='ax.plot'</em>, <em class="sig-param">plot_resources={&lt;AxPlotTypes.CONTOUR: 0&gt;: 'contour.js'</em>, <em class="sig-param">&lt;AxPlotTypes.GENERIC: 1&gt;: 'generic_plotly.js'</em>, <em class="sig-param">&lt;AxPlotTypes.INTERACT_CONTOUR: 3&gt;: 'interact_contour.js'</em>, <em class="sig-param">&lt;AxPlotTypes.SLICE: 2&gt;: 'slice.js'</em>, <em class="sig-param">&lt;AxPlotTypes.BANDIT_ROLLOUT: 4&gt;: 'bandit_rollout.js'}</em>, <em class="sig-param">inject_helpers=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/plot/render.html#plot_config_to_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.plot.render.plot_config_to_html" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ax.plot.render.</code><code class="sig-name descname">plot_config_to_html</code><span class="sig-paren">(</span><em class="sig-param">plot_config</em>, <em class="sig-param">plot_module_name='ax.plot'</em>, <em class="sig-param">plot_resources={&lt;AxPlotTypes.CONTOUR: 0&gt;: 'contour.js'</em>, <em class="sig-param">&lt;AxPlotTypes.GENERIC: 1&gt;: 'generic_plotly.js'</em>, <em class="sig-param">&lt;AxPlotTypes.INTERACT_CONTOUR: 3&gt;: 'interact_contour.js'</em>, <em class="sig-param">&lt;AxPlotTypes.SLICE: 2&gt;: 'slice.js'</em>, <em class="sig-param">&lt;AxPlotTypes.INTERACT_SLICE: 5&gt;: 'interact_slice.js'</em>, <em class="sig-param">&lt;AxPlotTypes.BANDIT_ROLLOUT: 4&gt;: 'bandit_rollout.js'}</em>, <em class="sig-param">inject_helpers=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/plot/render.html#plot_config_to_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.plot.render.plot_config_to_html" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate HTML + JS corresponding from a plot config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -668,6 +672,36 @@ parameterizations of arms on hover. Default is False.</p></li>
 </div>
 <div class="section" id="module-ax.plot.slice">
 <span id="slice-plot"></span><h3>Slice Plot<a class="headerlink" href="#module-ax.plot.slice" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ax.plot.slice.interact_slice">
+<code class="sig-prename descclassname">ax.plot.slice.</code><code class="sig-name descname">interact_slice</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">param_name</em>, <em class="sig-param">metric_name=''</em>, <em class="sig-param">generator_runs_dict=None</em>, <em class="sig-param">relative=False</em>, <em class="sig-param">density=50</em>, <em class="sig-param">slice_values=None</em>, <em class="sig-param">fixed_features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/plot/slice.html#interact_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.plot.slice.interact_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create interactive plot with predictions for a 1-d slice of the parameter
+space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="modelbridge.html#ax.modelbridge.base.ModelBridge" title="ax.modelbridge.base.ModelBridge"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBridge</span></code></a>) – ModelBridge that contains model for predictions</p></li>
+<li><p><strong>param_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of parameter that will be sliced</p></li>
+<li><p><strong>metric_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of metric to plot</p></li>
+<li><p><strong>generator_runs_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="core.html#ax.core.generator_run.GeneratorRun" title="ax.core.generator_run.GeneratorRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneratorRun</span></code></a>]]) – A dictionary {name: generator run} of generator runs
+whose arms will be plotted, if they lie in the slice.</p></li>
+<li><p><strong>relative</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Predictions relative to status quo</p></li>
+<li><p><strong>density</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of points along slice to evaluate predictions.</p></li>
+<li><p><strong>slice_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – A dictionary {name: val} for the fixed values of the
+other parameters. If not provided, then the status quo values will
+be used if there is a status quo, otherwise the mean of numeric
+parameters or the mode of choice parameters. Ignored if
+fixed_features is specified.</p></li>
+<li><p><strong>fixed_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="core.html#ax.core.observation.ObservationFeatures" title="ax.core.observation.ObservationFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObservationFeatures</span></code></a>]) – An ObservationFeatures object containing the values of
+features (including non-parameter features like context) to be set
+in the slice.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#ax.plot.base.AxPlotConfig" title="ax.plot.base.AxPlotConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxPlotConfig</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="function">
 <dt id="ax.plot.slice.plot_slice">
 <code class="sig-prename descclassname">ax.plot.slice.</code><code class="sig-name descname">plot_slice</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">param_name</em>, <em class="sig-param">metric_name</em>, <em class="sig-param">generator_runs_dict=None</em>, <em class="sig-param">relative=False</em>, <em class="sig-param">density=50</em>, <em class="sig-param">slice_values=None</em>, <em class="sig-param">fixed_features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/plot/slice.html#plot_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.plot.slice.plot_slice" title="Permalink to this definition">¶</a></dt>
