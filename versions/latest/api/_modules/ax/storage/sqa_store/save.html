@@ -102,6 +102,8 @@ src="/js/documentation_options.js">
         <span class="n">experiment_id</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Experiment was set on the generation strategy, so we need to save it first.</span>
+        <span class="c1"># pyre-fixme[6]: Expected `Experiment` for 1st param but got</span>
+        <span class="c1">#  `Optional[Experiment]`.</span>
         <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
         <span class="n">experiment_id</span> <span class="o">=</span> <span class="n">_get_experiment_id</span><span class="p">(</span>
             <span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span>

@@ -73,6 +73,7 @@ src="/js/documentation_options.js">
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">arm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Arm</span><span class="p">]:</span>
         <span class="sd">"""The arm associated with this batch."""</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `arms`.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_run</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator_run</span><span class="o">.</span><span class="n">arms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>  <span class="c1"># pragma: no cover</span>
                 <span class="s2">"Generator run associated with this trial included multiple "</span>
@@ -129,6 +130,8 @@ src="/js/documentation_options.js">
 <span class="sd">            arms: list of a single arm</span>
 <span class="sd">                attached to this trial if there is one, else None.</span>
 <span class="sd">        """</span>
+        <span class="c1"># pyre-fixme[7]: Expected `List[Arm]` but got `Union[List[Optional[Arm]],</span>
+        <span class="c1">#  List[_T]]`.</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">arm</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
 
     <span class="nd">@property</span>
@@ -141,11 +144,14 @@ src="/js/documentation_options.js">
 <span class="sd">                arm name to arm if one is attached to this trial,</span>
 <span class="sd">                else None.</span>
 <span class="sd">        """</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
         <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">arm</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">arm</span><span class="p">}</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">abandoned_arms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Arm</span><span class="p">]:</span>
         <span class="sd">"""Abandoned arms attached to this trial."""</span>
+        <span class="c1"># pyre-fixme[7]: Expected `List[Arm]` but got `Union[List[Optional[Arm]],</span>
+        <span class="c1">#  List[_T]]`.</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">arm</span><span class="p">]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_run</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>

@@ -117,6 +117,7 @@ src="/js/documentation_options.js">
             <span class="c1"># pyre-fixme[16]: Optional type has no attribute `__getitem__`.</span>
             <span class="p">(</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span class="n">arms</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="c1"># pyre-fixme[6]: Expected `float` for 1st param but got `Optional[float]`.</span>
             <span class="k">if</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_weight</span>
         <span class="p">]</span>
 

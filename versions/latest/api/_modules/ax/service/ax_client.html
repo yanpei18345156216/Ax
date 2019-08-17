@@ -333,6 +333,7 @@ src="/js/documentation_options.js">
                 <span class="s2">"set on AxClient first."</span>
             <span class="p">)</span>
         <span class="n">parallelism_settings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `_steps`.</span>
         <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_steps</span><span class="p">:</span>
             <span class="n">parallelism_settings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">num_arms</span><span class="p">,</span> <span class="n">step</span><span class="o">.</span><span class="n">recommended_max_parallelism</span> <span class="ow">or</span> <span class="n">step</span><span class="o">.</span><span class="n">num_arms</span><span class="p">)</span>
@@ -428,6 +429,7 @@ src="/js/documentation_options.js">
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="n">f</span><span class="s1">'Metric "</span><span class="si">{metric_name}</span><span class="s1">" is not associated with this optimization.'</span>
             <span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `model`.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">plot_contour</span><span class="p">(</span>
@@ -527,6 +529,7 @@ src="/js/documentation_options.js">
                 <span class="s2">"Experiment not set on Ax client. Must first "</span>
                 <span class="s2">"call load_experiment or create_experiment to use handler functions."</span>
             <span class="p">)</span>
+        <span class="c1"># pyre-fixme[7]: Expected `Experiment` but got `Optional[Experiment]`.</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span>
 
     <span class="k">def</span> <span class="nf">_save_experiment_if_possible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>

@@ -76,6 +76,7 @@ src="/js/documentation_options.js">
         <span class="sd">"""Get arm name. Throws if name is None."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Arm's name is None."</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[7]: Expected `str` but got `Optional[str]`.</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
     <span class="nd">@property</span>

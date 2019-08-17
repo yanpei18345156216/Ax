@@ -311,6 +311,7 @@ src="/js/documentation_options.js">
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_type</span> <span class="ow">is</span> <span class="n">ParameterType</span><span class="o">.</span><span class="n">FLOAT</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[6]: Expected `None` for 2nd param but got `Optional[int]`.</span>
             <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span>
         <span class="c1"># pyre-fixme[29]: `Union[Type[bool], Type[float], Type[int], Type[str]]` is</span>
         <span class="c1">#  not a function.</span>

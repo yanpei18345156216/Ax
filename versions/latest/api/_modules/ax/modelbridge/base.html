@@ -138,6 +138,7 @@ src="/js/documentation_options.js">
             <span class="bp">self</span><span class="o">.</span><span class="n">_arms_by_signature</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">arms_by_signature</span>
 
         <span class="n">observations</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="c1"># pyre-fixme[6]: Expected `Experiment` for 1st param but got `None`.</span>
             <span class="n">observations_from_data</span><span class="p">(</span><span class="n">experiment</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">experiment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="k">else</span> <span class="p">[]</span>
@@ -282,6 +283,7 @@ src="/js/documentation_options.js">
             <span class="ow">and</span> <span class="n">experiment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="ow">and</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">):</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
             <span class="n">status_quo_name</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">name</span>
 
         <span class="k">if</span> <span class="n">status_quo_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -505,6 +507,7 @@ src="/js/documentation_options.js">
 
         <span class="k">if</span> <span class="n">optimization_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">optimization_config</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `clone`.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_optimization_config</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimization_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="k">else</span> <span class="kc">None</span>

@@ -134,7 +134,9 @@ src="/js/documentation_options.js">
         <span class="n">status_quo_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">status_quo_parameters</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
             <span class="n">status_quo_name</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">name</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `parameters`.</span>
             <span class="n">status_quo_parameters</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">parameters</span>
 
         <span class="n">trials</span> <span class="o">=</span> <span class="p">[</span>
@@ -169,7 +171,11 @@ src="/js/documentation_options.js">
                     <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">runner_to_sqa</span><span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">runner</span><span class="p">)]</span> <span class="k">if</span> <span class="n">experiment</span><span class="o">.</span><span class="n">runner</span> <span class="k">else</span> <span class="p">[]</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Runner` for 1st param but got</span>
+                <span class="c1">#  `Optional[Runner]`.</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">runner_to_sqa</span><span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">runner</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="n">experiment</span><span class="o">.</span><span class="n">runner</span>
+                <span class="k">else</span> <span class="p">[]</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experiment</span><span class="p">,</span> <span class="n">SimpleExperiment</span><span class="p">):</span>
@@ -424,6 +430,7 @@ src="/js/documentation_options.js">
         <span class="n">best_arm_parameters</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">best_arm_predictions</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">generator_run</span><span class="o">.</span><span class="n">best_arm_predictions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `__getitem__`.</span>
             <span class="n">best_arm</span> <span class="o">=</span> <span class="n">generator_run</span><span class="o">.</span><span class="n">best_arm_predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">best_arm_predictions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">generator_run</span><span class="o">.</span><span class="n">best_arm_predictions</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">best_arm_name</span> <span class="o">=</span> <span class="n">best_arm</span><span class="o">.</span><span class="n">_name</span>
@@ -522,6 +529,7 @@ src="/js/documentation_options.js">
 <span class="sd">        In addition to creating and storing a new Trial object, we need to</span>
 <span class="sd">        create and store the GeneratorRuns and Runner that it owns.</span>
 <span class="sd">        """</span>
+        <span class="c1"># pyre-fixme[6]: Expected `Runner` for 1st param but got `Optional[Runner]`.</span>
         <span class="n">runner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner_to_sqa</span><span class="p">(</span><span class="n">runner</span><span class="o">=</span><span class="n">trial</span><span class="o">.</span><span class="n">runner</span><span class="p">)</span> <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">runner</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">abandoned_arms</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">generator_runs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -553,6 +561,8 @@ src="/js/documentation_options.js">
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">Trial</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">generator_run</span><span class="p">:</span>
                 <span class="n">generator_runs</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="c1"># pyre-fixme[6]: Expected `GeneratorRun` for 1st param but got</span>
+                    <span class="c1">#  `Optional[GeneratorRun]`.</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">generator_run_to_sqa</span><span class="p">(</span><span class="n">generator_run</span><span class="o">=</span><span class="n">trial</span><span class="o">.</span><span class="n">generator_run</span><span class="p">)</span>
                 <span class="p">]</span>
 

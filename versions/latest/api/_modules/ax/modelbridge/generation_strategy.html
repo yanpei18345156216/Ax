@@ -154,11 +154,13 @@ src="/js/documentation_options.js">
         <span class="sd">"""Name of this generation strategy. Defaults to a combination of model</span>
 <span class="sd">        names provided in generation steps."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[7]: Expected `str` but got `Optional[str]`.</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
         <span class="c1"># Model can be defined as member of Models enum or as a factory function,</span>
         <span class="c1"># so we use Models member (str) value if former and function name if latter.</span>
         <span class="n">factory_names</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="c1"># pyre-fixme[16]: `Union` has no attribute `value`.</span>
             <span class="n">checked_cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">Models</span><span class="p">)</span>
             <span class="k">else</span> <span class="n">step</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1"># pyre-ignore[16]</span>
@@ -251,6 +253,7 @@ src="/js/documentation_options.js">
             <span class="bp">self</span><span class="o">.</span><span class="n">_change_model</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">all_data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">new_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># We're sticking with the curr. model, but should update with new data.</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `update`.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">new_data</span><span class="p">)</span>
 
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">consolidate_kwargs</span><span class="p">(</span>
@@ -279,7 +282,9 @@ src="/js/documentation_options.js">
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">empty</span>
         <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">experiment_equals</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
         <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_name</span>
@@ -300,6 +305,7 @@ src="/js/documentation_options.js">
         <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_steps</span><span class="p">:</span>
             <span class="n">num_arms</span> <span class="o">=</span> <span class="n">f</span><span class="s2">"</span><span class="si">{step.num_arms}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">step</span><span class="o">.</span><span class="n">num_arms</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="s2">"subsequent"</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">Models</span><span class="p">):</span>
+                <span class="c1"># pyre-fixme[16]: `Union` has no attribute `value`.</span>
                 <span class="nb">repr</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">"</span><span class="si">{step.model.value}</span><span class="s2"> for </span><span class="si">{num_arms}</span><span class="s2"> arms, "</span>
         <span class="nb">repr</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="nb">repr</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">"], generated {len(self._generated)} arm(s))"</span>
@@ -371,7 +377,11 @@ src="/js/documentation_options.js">
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No experiment was set on this generation strategy."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">get_model_from_generator_run</span><span class="p">(</span>
-            <span class="n">generator_run</span><span class="o">=</span><span class="n">generator_run</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+            <span class="n">generator_run</span><span class="o">=</span><span class="n">generator_run</span><span class="p">,</span>
+            <span class="c1"># pyre-fixme[6]: Expected `Experiment` for 2nd param but got</span>
+            <span class="c1">#  `Optional[Experiment]`.</span>
+            <span class="n">experiment</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_change_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -427,6 +437,7 @@ src="/js/documentation_options.js">
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `_name`.</span>
             <span class="ow">and</span> <span class="n">experiment</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">_name</span>
         <span class="p">):</span>  <span class="c1"># pragma: no cover</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>

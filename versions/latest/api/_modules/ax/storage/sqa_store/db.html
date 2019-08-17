@@ -442,6 +442,7 @@ src="/js/documentation_options.js">
     <span class="k">if</span> <span class="n">SESSION_FACTORY</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">init_engine_and_session_factory</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
     <span class="k">assert</span> <span class="n">SESSION_FACTORY</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="c1"># pyre-fixme[29]: `Session` is not a function.</span>
     <span class="k">return</span> <span class="n">SESSION_FACTORY</span><span class="p">()</span></div>
 
 

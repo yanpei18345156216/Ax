@@ -144,11 +144,13 @@ src="/js/documentation_options.js">
         <span class="n">Xs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">Xs</span><span class="p">)</span>
         <span class="n">Ys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">Ys</span><span class="p">)</span>
         <span class="n">Yvars</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">Yvars</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `update`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Xs</span><span class="o">=</span><span class="n">Xs</span><span class="p">,</span> <span class="n">Ys</span><span class="o">=</span><span class="n">Ys</span><span class="p">,</span> <span class="n">Yvars</span><span class="o">=</span><span class="n">Yvars</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_model_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">FIT_MODEL_ERROR</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">"_model_predict"</span><span class="p">))</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `predict`.</span>
         <span class="n">f</span><span class="p">,</span> <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">var</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
@@ -166,17 +168,27 @@ src="/js/documentation_options.js">
     <span class="p">]:</span>
         <span class="n">objective_weights</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">objective_weights</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">outcome_constraints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># pyre-fixme[9]: outcome_constraints has type `Optional[Tuple[ndarray,</span>
+            <span class="c1">#  ndarray]]`; used as `Tuple[Tensor, Tensor]`.</span>
             <span class="n">outcome_constraints</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">outcome_constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">outcome_constraints</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">linear_constraints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># pyre-fixme[9]: linear_constraints has type `Optional[Tuple[ndarray,</span>
+            <span class="c1">#  ndarray]]`; used as `Tuple[Tensor, Tensor]`.</span>
             <span class="n">linear_constraints</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">linear_constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">linear_constraints</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">pending_observations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># pyre-fixme[9]: pending_observations has type</span>
+            <span class="c1">#  `Optional[List[ndarray]]`; used as `List[Tensor]`.</span>
             <span class="n">pending_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">pending_observations</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[7]: Expected `Tuple[Tensor, Optional[Tuple[Tensor, Tensor]],</span>
+        <span class="c1">#  Optional[Tuple[Tensor, Tensor]], Optional[List[Tensor]]]` but got</span>
+        <span class="c1">#  `Tuple[Tensor, Optional[Tuple[ndarray, ndarray]], Optional[Tuple[ndarray,</span>
+        <span class="c1">#  ndarray]], Optional[List[ndarray]]]`.</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">objective_weights</span><span class="p">,</span>
             <span class="n">outcome_constraints</span><span class="p">,</span>
@@ -205,6 +217,7 @@ src="/js/documentation_options.js">
             <span class="n">pending_observations</span><span class="o">=</span><span class="n">pending_observations</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">tensor_rounding_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_callable_to_tensor_callable</span><span class="p">(</span><span class="n">rounding_func</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `gen`.</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">gen</span><span class="p">(</span>
             <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
             <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
@@ -236,6 +249,7 @@ src="/js/documentation_options.js">
             <span class="n">pending_observations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `best_point`.</span>
             <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">best_point</span><span class="p">(</span>
                 <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
                 <span class="n">objective_weights</span><span class="o">=</span><span class="n">obj_w</span><span class="p">,</span>
@@ -262,6 +276,7 @@ src="/js/documentation_options.js">
         <span class="n">Ys_train</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">Ys_train</span><span class="p">)</span>
         <span class="n">Yvars_train</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_list_to_tensors</span><span class="p">(</span><span class="n">Yvars_train</span><span class="p">)</span>
         <span class="n">X_test</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_to_tensor</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `cross_validate`.</span>
         <span class="n">f_test</span><span class="p">,</span> <span class="n">cov_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">cross_validate</span><span class="p">(</span>
             <span class="n">Xs_train</span><span class="o">=</span><span class="n">Xs_train</span><span class="p">,</span> <span class="n">Ys_train</span><span class="o">=</span><span class="n">Ys_train</span><span class="p">,</span> <span class="n">Yvars_train</span><span class="o">=</span><span class="n">Yvars_train</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span>
         <span class="p">)</span>

@@ -333,6 +333,7 @@ src="/js/documentation_options.js">
         <span class="k">return</span> <span class="kc">None</span>
     <span class="c1"># Predict objective and P(feas) at these points</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">TorchModel</span><span class="p">):</span>
+        <span class="c1"># pyre-fixme[29]: `Union[() -&gt; Tensor, Any]` is not a function.</span>
         <span class="n">X_obs</span> <span class="o">=</span> <span class="n">X_obs</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
     <span class="n">f</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">as_array</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_obs</span><span class="p">))</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">objective_weights_np</span> <span class="o">@</span> <span class="n">f</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>  <span class="c1"># pyre-ignore</span>

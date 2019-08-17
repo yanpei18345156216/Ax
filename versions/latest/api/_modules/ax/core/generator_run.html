@@ -243,7 +243,12 @@ src="/js/documentation_options.js">
         <span class="n">predictions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TModelPredictArm</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cond</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arms</span><span class="p">):</span>
             <span class="n">predictions</span><span class="p">[</span><span class="n">cond</span><span class="o">.</span><span class="n">signature</span><span class="p">]</span> <span class="o">=</span> <span class="n">extract_arm_predictions</span><span class="p">(</span>
-                <span class="n">model_predictions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_predictions</span><span class="p">,</span> <span class="n">arm_idx</span><span class="o">=</span><span class="n">idx</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Tuple[Dict[str, List[float]], Dict[str,</span>
+                <span class="c1">#  Dict[str, List[float]]]]` for 1st param but got</span>
+                <span class="c1">#  `Optional[Tuple[Dict[str, List[float]], Dict[str, Dict[str,</span>
+                <span class="c1">#  List[float]]]]]`.</span>
+                <span class="n">model_predictions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_predictions</span><span class="p">,</span>
+                <span class="n">arm_idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">predictions</span>
 
@@ -270,9 +275,11 @@ src="/js/documentation_options.js">
         <span class="n">generator_run</span> <span class="o">=</span> <span class="n">GeneratorRun</span><span class="p">(</span>
             <span class="n">arms</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arms</span><span class="p">],</span>
             <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[:]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `clone`.</span>
             <span class="n">optimization_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">optimization_config</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimization_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `clone`.</span>
             <span class="n">search_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">search_space</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_space</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
@@ -286,7 +293,10 @@ src="/js/documentation_options.js">
         <span class="n">generator_run</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span>
         <span class="n">generator_run</span><span class="o">.</span><span class="n">_model_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_key</span>
         <span class="n">generator_run</span><span class="o">.</span><span class="n">_model_kwargs</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_model_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `copy`.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span>
         <span class="n">generator_run</span><span class="o">.</span><span class="n">_bridge_kwargs</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bridge_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>

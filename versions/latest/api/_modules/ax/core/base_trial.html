@@ -266,8 +266,10 @@ src="/js/documentation_options.js">
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No runner set on trial or experiment."</span><span class="p">)</span>
 
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `run`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
+        <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `staging_required`.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">staging_required</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mark_staged</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -394,6 +396,7 @@ src="/js/documentation_options.js">
 
         <span class="n">prev_step</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">TrialStatus</span><span class="o">.</span><span class="n">STAGED</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `staging_required`.</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">staging_required</span>
             <span class="k">else</span> <span class="n">TrialStatus</span><span class="o">.</span><span class="n">CANDIDATE</span>
         <span class="p">)</span>

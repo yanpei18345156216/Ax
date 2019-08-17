@@ -137,6 +137,8 @@ src="/js/documentation_options.js">
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated_points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">generated_points</span> <span class="o">=</span> <span class="n">points</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Collection[ndarray]` for 1st param but</span>
+                <span class="c1">#  got `List[Optional[ndarray]]`.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">generated_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">generated_points</span><span class="p">,</span> <span class="n">points</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)))</span></div>
 

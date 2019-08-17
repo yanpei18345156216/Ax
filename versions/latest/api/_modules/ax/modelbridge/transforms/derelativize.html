@@ -74,6 +74,7 @@ src="/js/documentation_options.js">
                 <span class="s2">"not fit with status quo."</span>
             <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `features`.</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">modelbridge</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">modelbridge</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">features</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="c1"># Check if it is out-of-design.</span>
@@ -82,7 +83,9 @@ src="/js/documentation_options.js">
             <span class="p">):</span>
                 <span class="c1"># Out-of-design: use the raw observation</span>
                 <span class="n">sq_data</span> <span class="o">=</span> <span class="n">ivw_metric_merge</span><span class="p">(</span>
-                    <span class="n">obsd</span><span class="o">=</span><span class="n">modelbridge</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">conflicting_noiseless</span><span class="o">=</span><span class="s2">"raise"</span>
+                    <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `data`.</span>
+                    <span class="n">obsd</span><span class="o">=</span><span class="n">modelbridge</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">conflicting_noiseless</span><span class="o">=</span><span class="s2">"raise"</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">f</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">unwrap_observation_data</span><span class="p">([</span><span class="n">sq_data</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>

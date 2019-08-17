@@ -119,6 +119,7 @@ src="/js/documentation_options.js">
         <span class="sd">"""Get experiment name. Throws if name is None."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Experiment's name is None."</span><span class="p">)</span>
+        <span class="c1"># pyre-fixme[7]: Expected `str` but got `Optional[str]`.</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
     <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
@@ -205,10 +206,12 @@ src="/js/documentation_options.js">
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_quo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">persist_old_sq</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trials</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_quo</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">trial</span><span class="o">.</span><span class="n">arms_by_name</span><span class="p">:</span>
                     <span class="n">persist_old_sq</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">persist_old_sq</span><span class="p">:</span>
+                <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `signature`.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_arms_by_signature</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status_quo</span><span class="o">.</span><span class="n">signature</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_status_quo</span> <span class="o">=</span> <span class="n">status_quo</span>

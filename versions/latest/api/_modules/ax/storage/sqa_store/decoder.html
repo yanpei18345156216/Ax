@@ -124,6 +124,9 @@ src="/js/documentation_options.js">
             <span class="p">)</span>
         <span class="n">status_quo</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">Arm</span><span class="p">(</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Dict[str, Optional[Union[bool, float,</span>
+                <span class="c1">#  int, str]]]` for 1st param but got `Optional[Dict[str,</span>
+                <span class="c1">#  Optional[Union[bool, float, int, str]]]]`.</span>
                 <span class="n">parameters</span><span class="o">=</span><span class="n">experiment_sqa</span><span class="o">.</span><span class="n">status_quo_parameters</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">experiment_sqa</span><span class="o">.</span><span class="n">status_quo_name</span><span class="p">,</span>
             <span class="p">)</span>
@@ -186,6 +189,9 @@ src="/js/documentation_options.js">
             <span class="p">)</span>
         <span class="n">status_quo</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">Arm</span><span class="p">(</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Dict[str, Optional[Union[bool, float,</span>
+                <span class="c1">#  int, str]]]` for 1st param but got `Optional[Dict[str,</span>
+                <span class="c1">#  Optional[Union[bool, float, int, str]]]]`.</span>
                 <span class="n">parameters</span><span class="o">=</span><span class="n">experiment_sqa</span><span class="o">.</span><span class="n">status_quo_parameters</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">experiment_sqa</span><span class="o">.</span><span class="n">status_quo_name</span><span class="p">,</span>
             <span class="p">)</span>
@@ -245,6 +251,7 @@ src="/js/documentation_options.js">
             <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">trial</span><span class="o">.</span><span class="n">arms</span><span class="p">:</span>
                 <span class="n">experiment</span><span class="o">.</span><span class="n">_arms_by_signature</span><span class="p">[</span><span class="n">arm</span><span class="o">.</span><span class="n">signature</span><span class="p">]</span> <span class="o">=</span> <span class="n">arm</span>
         <span class="k">if</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `signature`.</span>
             <span class="n">sq_sig</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span><span class="o">.</span><span class="n">signature</span>
             <span class="n">experiment</span><span class="o">.</span><span class="n">_arms_by_signature</span><span class="p">[</span><span class="n">sq_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">status_quo</span>
         <span class="n">experiment</span><span class="o">.</span><span class="n">_time_created</span> <span class="o">=</span> <span class="n">experiment_sqa</span><span class="o">.</span><span class="n">time_created</span>
@@ -265,6 +272,8 @@ src="/js/documentation_options.js">
             <span class="k">return</span> <span class="n">RangeParameter</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">parameter_type</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">parameter_type</span><span class="p">,</span>
+                <span class="c1"># pyre-fixme[6]: Expected `float` for 3rd param but got</span>
+                <span class="c1">#  `Optional[float]`.</span>
                 <span class="n">lower</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
                 <span class="n">upper</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span>
                 <span class="n">log_scale</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">log_scale</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
@@ -278,6 +287,9 @@ src="/js/documentation_options.js">
             <span class="k">return</span> <span class="n">ChoiceParameter</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">parameter_type</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">parameter_type</span><span class="p">,</span>
+                <span class="c1"># pyre-fixme[6]: Expected `List[Optional[Union[bool, float, int,</span>
+                <span class="c1">#  str]]]` for 3rd param but got `Optional[List[Optional[Union[bool,</span>
+                <span class="c1">#  float, int, str]]]]`.</span>
                 <span class="n">values</span><span class="o">=</span><span class="n">parameter_sqa</span><span class="o">.</span><span class="n">choice_values</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">parameter_sqa</span><span class="o">.</span><span class="n">domain_type</span> <span class="o">==</span> <span class="n">DomainType</span><span class="o">.</span><span class="n">FIXED</span><span class="p">:</span>
@@ -314,7 +326,9 @@ src="/js/documentation_options.js">
                     <span class="s2">"Cannot decode SQAParameterConstraint because `lower_name` or "</span>
                     <span class="s2">"`upper_name` was not found."</span>
                 <span class="p">)</span>
+            <span class="c1"># pyre-fixme[6]: Expected `str` for 1st param but got `None`.</span>
             <span class="n">lower_parameter</span> <span class="o">=</span> <span class="n">parameter_map</span><span class="p">[</span><span class="n">lower_name</span><span class="p">]</span>
+            <span class="c1"># pyre-fixme[6]: Expected `str` for 1st param but got `None`.</span>
             <span class="n">upper_parameter</span> <span class="o">=</span> <span class="n">parameter_map</span><span class="p">[</span><span class="n">upper_name</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">OrderConstraint</span><span class="p">(</span>
                 <span class="n">lower_parameter</span><span class="o">=</span><span class="n">lower_parameter</span><span class="p">,</span> <span class="n">upper_parameter</span><span class="o">=</span><span class="n">upper_parameter</span>
@@ -428,6 +442,7 @@ src="/js/documentation_options.js">
                 <span class="k">raise</span> <span class="n">SQADecodeError</span><span class="p">(</span>  <span class="c1"># pragma: no cover</span>
                     <span class="s2">"Cannot decode SQAMetric to Objective because minimize is None."</span>
                 <span class="p">)</span>
+            <span class="c1"># pyre-fixme[6]: Expected `bool` for 2nd param but got `Optional[bool]`.</span>
             <span class="k">return</span> <span class="n">Objective</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">minimize</span><span class="o">=</span><span class="n">metric_sqa</span><span class="o">.</span><span class="n">minimize</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">metric_sqa</span><span class="o">.</span><span class="n">intent</span> <span class="o">==</span> <span class="n">MetricIntent</span><span class="o">.</span><span class="n">OUTCOME_CONSTRAINT</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -441,6 +456,8 @@ src="/js/documentation_options.js">
                 <span class="p">)</span>
             <span class="k">return</span> <span class="n">OutcomeConstraint</span><span class="p">(</span>
                 <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+                <span class="c1"># pyre-fixme[6]: Expected `float` for 2nd param but got</span>
+                <span class="c1">#  `Optional[float]`.</span>
                 <span class="n">bound</span><span class="o">=</span><span class="n">metric_sqa</span><span class="o">.</span><span class="n">bound</span><span class="p">,</span>
                 <span class="n">op</span><span class="o">=</span><span class="n">metric_sqa</span><span class="o">.</span><span class="n">op</span><span class="p">,</span>
                 <span class="n">relative</span><span class="o">=</span><span class="n">metric_sqa</span><span class="o">.</span><span class="n">relative</span><span class="p">,</span>
@@ -527,13 +544,22 @@ src="/js/documentation_options.js">
         <span class="p">):</span>
             <span class="n">best_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">best_arm_name</span><span class="p">,</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Dict[str, Optional[Union[bool, float,</span>
+                <span class="c1">#  int, str]]]` for 2nd param but got `Optional[Dict[str,</span>
+                <span class="c1">#  Optional[Union[bool, float, int, str]]]]`.</span>
                 <span class="n">parameters</span><span class="o">=</span><span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">best_arm_parameters</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">best_arm_predictions</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">best_arm</span><span class="p">,</span>
+                <span class="c1"># pyre-fixme[6]: Expected `Iterable[_T_co]` for 1st param but got</span>
+                <span class="c1">#  `Optional[Tuple[Dict[str, float], Optional[Dict[str, Dict[str,</span>
+                <span class="c1">#  float]]]]]`.</span>
                 <span class="nb">tuple</span><span class="p">(</span><span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">best_arm_predictions</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="n">model_predictions</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="c1"># pyre-fixme[6]: Expected `Iterable[_T_co]` for 1st param but got</span>
+            <span class="c1">#  `Optional[Tuple[Dict[str, List[float]], Dict[str, Dict[str,</span>
+            <span class="c1">#  List[float]]]]]`.</span>
             <span class="nb">tuple</span><span class="p">(</span><span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">model_predictions</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">generator_run_sqa</span><span class="o">.</span><span class="n">model_predictions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="k">else</span> <span class="kc">None</span>
