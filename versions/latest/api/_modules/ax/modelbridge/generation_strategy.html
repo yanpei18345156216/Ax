@@ -39,7 +39,6 @@ src="/js/documentation_options.js">
 <span class="kn">from</span> <span class="nn">ax.core.generator_run</span> <span class="k">import</span> <span class="n">GeneratorRun</span>
 <span class="kn">from</span> <span class="nn">ax.modelbridge.base</span> <span class="k">import</span> <span class="n">ModelBridge</span>
 <span class="kn">from</span> <span class="nn">ax.modelbridge.registry</span> <span class="k">import</span> <span class="n">Models</span>
-<span class="kn">from</span> <span class="nn">ax.utils.common.equality</span> <span class="k">import</span> <span class="n">equality_typechecker</span>
 <span class="kn">from</span> <span class="nn">ax.utils.common.kwargs</span> <span class="k">import</span> <span class="n">consolidate_kwargs</span><span class="p">,</span> <span class="n">get_function_argument_names</span>
 <span class="kn">from</span> <span class="nn">ax.utils.common.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
 <span class="kn">from</span> <span class="nn">ax.utils.common.typeutils</span> <span class="k">import</span> <span class="n">checked_cast</span><span class="p">,</span> <span class="n">not_none</span>
@@ -272,32 +271,6 @@ src="/js/documentation_options.js">
 <div class="viewcode-block" id="GenerationStrategy.clone_reset"><a class="viewcode-back" href="../../../modelbridge.html#ax.modelbridge.generation_strategy.GenerationStrategy.clone_reset">[docs]</a>    <span class="k">def</span> <span class="nf">clone_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"GenerationStrategy"</span><span class="p">:</span>
         <span class="sd">"""Copy this generation strategy without it's state."""</span>
         <span class="k">return</span> <span class="n">GenerationStrategy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_steps</span><span class="p">)</span></div>
-
-    <span class="nd">@equality_typechecker</span>
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">"GenerationStrategy"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">"""Need to override the default __eq__ method, because the default</span>
-<span class="sd">        checks equality of memory addresses of the objects.</span>
-<span class="sd">        """</span>
-        <span class="n">data_equals</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">empty</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">experiment_equals</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="c1"># pyre-fixme[16]: `Optional` has no attribute `name`.</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_experiment</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_name</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_db_id</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_steps</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_steps</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uses_registered_models</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_uses_registered_models</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_generated</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observed</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_observed</span>
-            <span class="ow">and</span> <span class="n">data_equals</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_curr</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_curr</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator_runs</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_generator_runs</span>
-            <span class="ow">and</span> <span class="n">experiment_equals</span>
-        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">"""String representation of this generation strategy."""</span>

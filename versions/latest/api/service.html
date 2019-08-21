@@ -537,6 +537,25 @@ to a TFidelityTrialEvaluation.</p>
 </dl>
 </dd></dl>
 <dl class="function">
+<dt id="ax.service.utils.storage.load_experiment_and_generation_strategy">
+<code class="sig-prename descclassname">ax.service.utils.storage.</code><code class="sig-name descname">load_experiment_and_generation_strategy</code><span class="sig-paren">(</span><em class="sig-param">experiment_name</em>, <em class="sig-param">db_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/service/utils/storage.html#load_experiment_and_generation_strategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.service.utils.storage.load_experiment_and_generation_strategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load experiment and the corresponding generation strategy from the DB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Experiment name.</p></li>
+<li><p><strong>db_settings</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DBSettings</span></code>) – Defines behavior for loading/saving experiment to/from db.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference internal" href="core.html#ax.core.experiment.Experiment" title="ax.core.experiment.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a>, <a class="reference internal" href="modelbridge.html#ax.modelbridge.generation_strategy.GenerationStrategy" title="ax.modelbridge.generation_strategy.GenerationStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationStrategy</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A tuple of the loaded experiment and generation strategy.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="function">
 <dt id="ax.service.utils.storage.save_experiment">
 <code class="sig-prename descclassname">ax.service.utils.storage.</code><code class="sig-name descname">save_experiment</code><span class="sig-paren">(</span><em class="sig-param">experiment</em>, <em class="sig-param">db_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/service/utils/storage.html#save_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.service.utils.storage.save_experiment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save experiment to db.</p>
@@ -544,6 +563,23 @@ to a TFidelityTrialEvaluation.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>experiment</strong> (<a class="reference internal" href="core.html#ax.core.experiment.Experiment" title="ax.core.experiment.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a>) – <cite>Experiment</cite> object.</p></li>
+<li><p><strong>db_settings</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DBSettings</span></code>) – Defines behavior for loading/saving experiment to/from db.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="function">
+<dt id="ax.service.utils.storage.save_experiment_and_generation_strategy">
+<code class="sig-prename descclassname">ax.service.utils.storage.</code><code class="sig-name descname">save_experiment_and_generation_strategy</code><span class="sig-paren">(</span><em class="sig-param">experiment</em>, <em class="sig-param">generation_strategy</em>, <em class="sig-param">db_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ax/service/utils/storage.html#save_experiment_and_generation_strategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ax.service.utils.storage.save_experiment_and_generation_strategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save experiment and generation strategy to DB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="core.html#ax.core.experiment.Experiment" title="ax.core.experiment.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a>) – <cite>Experiment</cite> object.</p></li>
+<li><p><strong>generation_strategy</strong> (<a class="reference internal" href="modelbridge.html#ax.modelbridge.generation_strategy.GenerationStrategy" title="ax.modelbridge.generation_strategy.GenerationStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationStrategy</span></code></a>) – Corresponding generation strategy.</p></li>
 <li><p><strong>db_settings</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DBSettings</span></code>) – Defines behavior for loading/saving experiment to/from db.</p></li>
 </ul>
 </dd>

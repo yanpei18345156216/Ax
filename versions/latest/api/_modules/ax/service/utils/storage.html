@@ -28,10 +28,17 @@ src="/js/documentation_options.js">
 <h1>Source code for ax.service.utils.storage</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+
 <span class="kn">from</span> <span class="nn">ax.core.experiment</span> <span class="k">import</span> <span class="n">Experiment</span>
+<span class="kn">from</span> <span class="nn">ax.modelbridge.generation_strategy</span> <span class="k">import</span> <span class="n">GenerationStrategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.db</span> <span class="k">import</span> <span class="n">init_engine_and_session_factory</span>
-<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.load</span> <span class="k">import</span> <span class="n">_load_experiment</span>
-<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.save</span> <span class="k">import</span> <span class="n">_save_experiment</span>
+<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.load</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">_load_experiment</span><span class="p">,</span>
+    <span class="n">_load_generation_strategy_by_experiment_name</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ax.storage.sqa_store.save</span> <span class="k">import</span> <span class="n">_save_experiment</span><span class="p">,</span> <span class="n">_save_generation_strategy</span>
 <span class="kn">from</span> <span class="nn">ax.storage.sqa_store.structs</span> <span class="k">import</span> <span class="n">DBSettings</span>
 
 
@@ -66,6 +73,43 @@ src="/js/documentation_options.js">
 <span class="sd">    """</span>
     <span class="n">init_engine_and_session_factory</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">db_settings</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">db_settings</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
     <span class="n">_save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">db_settings</span><span class="o">.</span><span class="n">encoder</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_experiment_and_generation_strategy"><a class="viewcode-back" href="../../../../service.html#ax.service.utils.storage.load_experiment_and_generation_strategy">[docs]</a><span class="k">def</span> <span class="nf">load_experiment_and_generation_strategy</span><span class="p">(</span>
+    <span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db_settings</span><span class="p">:</span> <span class="n">DBSettings</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Experiment</span><span class="p">,</span> <span class="n">GenerationStrategy</span><span class="p">]:</span>
+    <span class="sd">"""Load experiment and the corresponding generation strategy from the DB.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: Experiment name.</span>
+<span class="sd">        db_settings: Defines behavior for loading/saving experiment to/from db.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of the loaded experiment and generation strategy.</span>
+<span class="sd">    """</span>
+    <span class="n">experiment</span> <span class="o">=</span> <span class="n">load_experiment</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">db_settings</span><span class="o">=</span><span class="n">db_settings</span><span class="p">)</span>
+    <span class="n">generation_strategy</span> <span class="o">=</span> <span class="n">_load_generation_strategy_by_experiment_name</span><span class="p">(</span>
+        <span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">decoder</span><span class="o">=</span><span class="n">db_settings</span><span class="o">.</span><span class="n">decoder</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">generation_strategy</span></div>
+
+
+<div class="viewcode-block" id="save_experiment_and_generation_strategy"><a class="viewcode-back" href="../../../../service.html#ax.service.utils.storage.save_experiment_and_generation_strategy">[docs]</a><span class="k">def</span> <span class="nf">save_experiment_and_generation_strategy</span><span class="p">(</span>
+    <span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span>
+    <span class="n">generation_strategy</span><span class="p">:</span> <span class="n">GenerationStrategy</span><span class="p">,</span>
+    <span class="n">db_settings</span><span class="p">:</span> <span class="n">DBSettings</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">"""Save experiment and generation strategy to DB.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        experiment: `Experiment` object.</span>
+<span class="sd">        generation_strategy: Corresponding generation strategy.</span>
+<span class="sd">        db_settings: Defines behavior for loading/saving experiment to/from db.</span>
+<span class="sd">    """</span>
+    <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="n">db_settings</span><span class="o">=</span><span class="n">db_settings</span><span class="p">)</span>
+    <span class="n">_save_generation_strategy</span><span class="p">(</span>
+        <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">db_settings</span><span class="o">.</span><span class="n">encoder</span>
+    <span class="p">)</span></div>
 </pre></div>
 </div>
 </div>

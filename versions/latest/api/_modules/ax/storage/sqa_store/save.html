@@ -96,15 +96,21 @@ src="/js/documentation_options.js">
     <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SQAConfig</span><span class="p">()</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">_save_generation_strategy</span><span class="p">(</span>
+        <span class="n">generation_strategy</span><span class="o">=</span><span class="n">generation_strategy</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_save_generation_strategy</span><span class="p">(</span>
+    <span class="n">generation_strategy</span><span class="p">:</span> <span class="n">GenerationStrategy</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="c1"># If the generation strategy has not yet generated anything, there will be no</span>
     <span class="c1"># experiment set on it.</span>
     <span class="k">if</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">experiment_id</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Experiment was set on the generation strategy, so we need to save it first.</span>
-        <span class="c1"># pyre-fixme[6]: Expected `Experiment` for 1st param but got</span>
-        <span class="c1">#  `Optional[Experiment]`.</span>
-        <span class="n">save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">_save_experiment</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span><span class="p">)</span>
         <span class="n">experiment_id</span> <span class="o">=</span> <span class="n">_get_experiment_id</span><span class="p">(</span>
             <span class="n">experiment</span><span class="o">=</span><span class="n">generation_strategy</span><span class="o">.</span><span class="n">_experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span>
         <span class="p">)</span>
@@ -129,7 +135,7 @@ src="/js/documentation_options.js">
             <span class="c1"># need to update that manually</span>
             <span class="n">existing_gs_sqa</span><span class="o">.</span><span class="n">experiment_id</span> <span class="o">=</span> <span class="n">gs_sqa</span><span class="o">.</span><span class="n">experiment_id</span>
 
-    <span class="k">return</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span></div>
+    <span class="k">return</span> <span class="n">generation_strategy</span><span class="o">.</span><span class="n">_db_id</span>
 
 
 <span class="k">def</span> <span class="nf">_get_experiment_id</span><span class="p">(</span><span class="n">experiment</span><span class="p">:</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>

@@ -49,7 +49,6 @@ src="/js/documentation_options.js">
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">self_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
             <span class="n">other_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-
             <span class="n">self_val</span> <span class="o">=</span> <span class="n">numpy_type_to_python_type</span><span class="p">(</span><span class="n">self_val</span><span class="p">)</span>
             <span class="n">other_val</span> <span class="o">=</span> <span class="n">numpy_type_to_python_type</span><span class="p">(</span><span class="n">other_val</span><span class="p">)</span>
 
@@ -58,15 +57,40 @@ src="/js/documentation_options.js">
 
             <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">"_experiment"</span><span class="p">:</span>
                 <span class="c1"># prevent infinite loop when checking equality of Trials</span>
-                <span class="n">equal</span> <span class="o">=</span> <span class="n">self_val</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other_val</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">equal</span> <span class="o">=</span> <span class="n">self_val</span> <span class="ow">is</span> <span class="n">other_val</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span>
+                    <span class="n">self_val</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other_val</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">"_model"</span><span class="p">:</span>  <span class="c1"># pragma: no cover (tested in modelbridge)</span>
+                <span class="c1"># TODO[T52643706]: replace with per-`ModelBridge` method like</span>
+                <span class="c1"># `equivalent_models`, to compare models more meaningfully.</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">):</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other_val</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If model bridges have a `model` attribute, the types of the</span>
+                    <span class="c1"># values of those attributes should be equal if the model</span>
+                    <span class="c1"># bridge is the same.</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other_val</span><span class="o">.</span><span class="n">model</span><span class="p">))</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="n">equal</span> <span class="o">=</span> <span class="n">same_elements</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">other_val</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
                 <span class="n">equal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">other_val</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
                 <span class="n">equal</span> <span class="o">=</span> <span class="n">datetime_equals</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">other_val</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">equal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">other_val</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_val</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-                <span class="n">equal</span> <span class="o">=</span> <span class="n">self_val</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">other_val</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">self_val</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">other_val</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                        <span class="n">equal</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span>
+                            <span class="n">self_val</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                            <span class="n">other_val</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                            <span class="n">check_exact</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">equal</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">equal</span> <span class="o">=</span> <span class="n">self_val</span> <span class="o">==</span> <span class="n">other_val</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">equal</span><span class="p">:</span>
